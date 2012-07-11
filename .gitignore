@@ -1,0 +1,5 @@
+local.properties
+out/
+gen/
+bin/
+target/
