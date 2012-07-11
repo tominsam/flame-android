@@ -28,10 +28,12 @@ public class Flame extends ListActivity implements ServiceTypeListener, ServiceL
     Vector<JmDNS> resolvers;
     ArrayList<String> names;
     
+    static String TAG = "flame";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("flame", "started!");
+        Log.v(TAG, "started!");
         
         names = new ArrayList<String>();
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
@@ -42,7 +44,6 @@ public class Flame extends ListActivity implements ServiceTypeListener, ServiceL
         wifi.createWifiLock("mylock");
         //MulticastLock lock = wifi.createMulticastLock("mylock");
         //lock.acquire();
-
         
         resolvers = new Vector<JmDNS>();
         
@@ -50,15 +51,15 @@ public class Flame extends ListActivity implements ServiceTypeListener, ServiceL
         try {
             interfaces = NetworkInterface.getNetworkInterfaces();
         } catch (SocketException e) {
-            Log.v("flame", "Can't enumerate interfaces: " + e);
+            Log.v(TAG, "Can't enumerate interfaces: " + e);
         }
         while (interfaces != null && interfaces.hasMoreElements()) {
             NetworkInterface interf = interfaces.nextElement();
-            Log.v("flame", "listening on "+ interf.getDisplayName() );
+            Log.v(TAG, "listening on "+ interf.getDisplayName() );
             Enumeration<InetAddress> addresses = interf.getInetAddresses();
-            if (!interf.getName().equals("lo") && addresses.hasMoreElements()) {
+            while (!interf.getName().equals("lo") && addresses.hasMoreElements()) {
                 InetAddress address = addresses.nextElement();
-                Log.v("flame", "Listening on address " + address.toString());
+                Log.v(TAG, "Listening on address " + address.toString());
                 JmDNS jmdns;
                 try {
                     jmdns = JmDNS.create( address );
@@ -68,9 +69,9 @@ public class Flame extends ListActivity implements ServiceTypeListener, ServiceL
                     jmdns.registerService( flameService );
 
                     resolvers.add( jmdns );
-                    Log.v("flame", "added resolver "+jmdns);
+                    Log.v(TAG, "added resolver "+jmdns);
                 } catch (IOException e) {
-                    Log.v("flame", "Can't listen on interface " + address + ": " + e);
+                    Log.v(TAG, "Can't listen on interface " + address + ": " + e);
                 }
             }
         }
@@ -78,13 +79,13 @@ public class Flame extends ListActivity implements ServiceTypeListener, ServiceL
     }
 
     public void serviceTypeAdded(ServiceEvent event) {
-        Log.v("flame", "new type: " +event.getType());
+        Log.v(TAG, "new type: " +event.getType());
         final String type = event.getType();
         event.getDNS().addServiceListener( type, this );
     }
 
     public void serviceAdded(ServiceEvent event) {
-        Log.v("flame", "serviceAdded: "+event.getName());
+        Log.v(TAG, "serviceAdded: "+event.getName());
         event.getDNS().requestServiceInfo(event.getType(), event.getName(), 0);
         String string = event.getType() + " - " + event.getName();
         arrayAdapter.add( string );
@@ -92,11 +93,11 @@ public class Flame extends ListActivity implements ServiceTypeListener, ServiceL
     }
 
     public void serviceRemoved(ServiceEvent event) {
-        Log.v("flame", "serviceRemoved: "+event.getName());
+        Log.v(TAG, "serviceRemoved: "+event.getName());
     }
 
     public void serviceResolved(ServiceEvent event) {
-        Log.v("flame", "serviceResolved: "+event.getName());
+        Log.v(TAG, "serviceResolved: "+event.getName());
     }
 
 
