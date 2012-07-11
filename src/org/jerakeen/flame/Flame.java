@@ -27,7 +27,9 @@ public class Flame extends ListActivity implements ServiceTypeListener, ServiceL
     ArrayAdapter<String> arrayAdapter;
     Vector<JmDNS> resolvers;
     ArrayList<String> names;
-    
+
+    android.net.wifi.WifiManager.MulticastLock lock;
+
     static String TAG = "flame";
 
     @Override
@@ -38,13 +40,13 @@ public class Flame extends ListActivity implements ServiceTypeListener, ServiceL
         names = new ArrayList<String>();
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
         setListAdapter(arrayAdapter);
-        getListView().setTextFilterEnabled(true);
+//        getListView().setTextFilterEnabled(true);
 
-        WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
-        wifi.createWifiLock("mylock");
-        //MulticastLock lock = wifi.createMulticastLock("mylock");
-        //lock.acquire();
-        
+        android.net.wifi.WifiManager wifi = (android.net.wifi.WifiManager)getSystemService(android.content.Context.WIFI_SERVICE);
+        lock = wifi.createMulticastLock("FlameWifiLock");
+        lock.setReferenceCounted(true);
+        lock.acquire();
+
         resolvers = new Vector<JmDNS>();
         
         Enumeration<NetworkInterface> interfaces = null;
@@ -54,22 +56,21 @@ public class Flame extends ListActivity implements ServiceTypeListener, ServiceL
             Log.v(TAG, "Can't enumerate interfaces: " + e);
         }
         while (interfaces != null && interfaces.hasMoreElements()) {
-            NetworkInterface interf = interfaces.nextElement();
-            Log.v(TAG, "listening on "+ interf.getDisplayName() );
-            Enumeration<InetAddress> addresses = interf.getInetAddresses();
-            while (!interf.getName().equals("lo") && addresses.hasMoreElements()) {
+            NetworkInterface networkInterface = interfaces.nextElement();
+            Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
+            while (!networkInterface.getName().equals("lo") && addresses.hasMoreElements()) {
                 InetAddress address = addresses.nextElement();
-                Log.v(TAG, "Listening on address " + address.toString());
-                JmDNS jmdns;
+                Log.v(TAG, "Listening on " + networkInterface.getDisplayName() + " / " + address.toString());
                 try {
-                    jmdns = JmDNS.create( address );
+                    JmDNS jmdns = JmDNS.create(address);
                     jmdns.addServiceTypeListener(this);
 
-                    ServiceInfo flameService = ServiceInfo.create("_flame._tcp.", "Flame", 0, "flame-android");
-                    jmdns.registerService( flameService );
+//                    ServiceInfo flameService = new ServiceInfo("_flame._tcp.", "Flame", 0, "flame-android");
+//                    jmdns.registerService( flameService );
 
-                    resolvers.add( jmdns );
-                    Log.v(TAG, "added resolver "+jmdns);
+                    resolvers.add(jmdns);
+                    Log.v(TAG, "added resolver " + jmdns);
+
                 } catch (IOException e) {
                     Log.v(TAG, "Can't listen on interface " + address + ": " + e);
                 }
@@ -84,10 +85,16 @@ public class Flame extends ListActivity implements ServiceTypeListener, ServiceL
         event.getDNS().addServiceListener( type, this );
     }
 
+    @Override
+    public void subTypeForServiceTypeAdded(ServiceEvent serviceEvent) {
+        Log.v(TAG, "subTypeFroservicetypeadded " + serviceEvent);
+    }
+
     public void serviceAdded(ServiceEvent event) {
         Log.v(TAG, "serviceAdded: "+event.getName());
         event.getDNS().requestServiceInfo(event.getType(), event.getName(), 0);
         String string = event.getType() + " - " + event.getName();
+        Log.v(TAG, "stringified to " + string);
         arrayAdapter.add( string );
         arrayAdapter.notifyDataSetChanged();
     }
@@ -100,6 +107,10 @@ public class Flame extends ListActivity implements ServiceTypeListener, ServiceL
         Log.v(TAG, "serviceResolved: "+event.getName());
     }
 
-
+    @Override
+    protected void onDestroy() {
+        if (lock != null) lock.release();
+        super.onDestroy();
+    }
 }
 
