@@ -17,9 +17,13 @@ public class FlameService  {
         service = s;
         hostIdentifiers = new ArrayList<String>();
         if (service.getInfo() != null) {
-            hostIdentifiers.add(service.getInfo().getServer());
+            if (!service.getInfo().getServer().isEmpty()) {
+                hostIdentifiers.add(service.getInfo().getServer());
+            }
             for (String address : service.getInfo().getHostAddresses()) {
-                hostIdentifiers.add(address);
+                if (!address.isEmpty()) {
+                    hostIdentifiers.add(address);
+                }
             }
             hostIdentifiers.add(toString());
             Log.v(TAG, "hostIdentifiers for " + this + " are " + hostIdentifiers);
