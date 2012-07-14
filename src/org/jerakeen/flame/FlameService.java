@@ -30,4 +30,7 @@ public class FlameService  {
         return ((FlameService) o).toString().equals(toString());
     }
 
+    public String getName() {
+        return service.getName();
+    }
 }

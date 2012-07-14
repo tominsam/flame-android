@@ -6,6 +6,7 @@ import android.util.Log;
 import javax.jmdns.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -69,15 +70,6 @@ public class FlameBackgroundThread implements Runnable, ServiceTypeListener, Ser
         serviceListLock.unlock();
     }
 
-    public ArrayList<FlameService> getServices() {
-        // thread-safe way of getting a copy of the services array.
-        // TODO - really thread safe? how deep is clone?
-        serviceListLock.lock();
-        ArrayList<FlameService> copy = (ArrayList<FlameService>)this.services.clone();
-        serviceListLock.unlock();
-        return copy;
-    }
-
     public void serviceTypeAdded(ServiceEvent event) {
         Log.v(TAG, "new type: " + event.getType());
         final String type = event.getType();
@@ -108,11 +100,37 @@ public class FlameBackgroundThread implements Runnable, ServiceTypeListener, Ser
     }
 
     public void serviceResolved(ServiceEvent event) {
-        Log.v(TAG, "serviceResolved: "+event.getName() + " / " + event.getType());
+        Log.v(TAG, "serviceResolved: " + event.getName() + " / " + event.getType());
     }
 
     public void stop() {
         running = false;
         latch.countDown();
     }
+
+
+
+
+    public ArrayList<FlameService> getServices() {
+        // thread-safe way of getting a copy of the services array.
+        // TODO - really thread safe? how deep is clone?
+        serviceListLock.lock();
+        ArrayList<FlameService> copy = (ArrayList<FlameService>)this.services.clone();
+        serviceListLock.unlock();
+        return copy;
+    }
+
+    public ArrayList<FlameHost> getHosts() {
+        HashMap<String, FlameHost> map = new HashMap<String, FlameHost>();
+        for (FlameService service : getServices()) {
+            FlameHost host = map.get(service.getName());
+            if (host == null) {
+                host = new FlameHost(service.getName());
+                map.put(host.getName(), host);
+            }
+        }
+        return new ArrayList<FlameHost>(map.values());
+    }
+
 }
+

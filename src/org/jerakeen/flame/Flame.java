@@ -1,23 +1,8 @@
 package org.jerakeen.flame;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Vector;
-
-import javax.jmdns.JmDNS;
-import javax.jmdns.ServiceEvent;
-import javax.jmdns.ServiceInfo;
-import javax.jmdns.ServiceListener;
-import javax.jmdns.ServiceTypeListener;
 
 import android.app.ListActivity;
-import android.content.Context;
-import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -68,8 +53,8 @@ public class Flame extends ListActivity {
 
     private void updateFromBackground() {
         arrayAdapter.clear();
-        for (FlameService service : task.getServices()) {
-            arrayAdapter.add( service.toString() );
+        for (FlameHost host : task.getHosts()) {
+            arrayAdapter.add( host.getTitle() );
         }
         arrayAdapter.notifyDataSetChanged();
     }
