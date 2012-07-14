@@ -1,21 +1,38 @@
 package org.jerakeen.flame;
 
+import android.util.Log;
+
 import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
+import java.net.InetAddress;
+import java.util.ArrayList;
 
 public class FlameService  {
-    static String TAG = "HostList::FlameService";
+    static String TAG = "Flame::FlameService";
 
     ServiceEvent service;
-    ServiceInfo info;
+    ArrayList<String> hostIdentifiers;
 
     public FlameService(ServiceEvent s) {
         service = s;
+        hostIdentifiers = new ArrayList<String>();
+        if (service.getInfo() != null) {
+            hostIdentifiers.add(toString());
+            hostIdentifiers.add(service.getInfo().getServer());
+            for (String address : service.getInfo().getHostAddresses()) {
+                hostIdentifiers.add(address);
+            }
+            for (InetAddress address : service.getInfo().getInetAddresses()) {
+                hostIdentifiers.add(address.toString());
+            }
+            for (String url : service.getInfo().getURLs()) {
+                hostIdentifiers.add(url);
+            }
+        }
     }
 
-    public FlameService(ServiceEvent s, ServiceInfo i) {
-        service = s;
-        info = i;
+    public ArrayList<String> getHostIdentifiers() {
+        return hostIdentifiers;
     }
 
     public String toString() {

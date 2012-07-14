@@ -29,7 +29,7 @@ public class HostView extends ListActivity implements FlameListener {
             return;
         }
 
-        hostName = intent.getExtras().getString("hostName");
+        hostName = intent.getExtras().getString("hostIdentifier");
         if (hostName == null) {
             finish();
             return;

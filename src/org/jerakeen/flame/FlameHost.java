@@ -1,34 +1,51 @@
 package org.jerakeen.flame;
 
+import android.nfc.Tag;
+import android.util.Log;
+
 import java.util.ArrayList;
 
 public class FlameHost {
-    private String name;
-    ArrayList<FlameService> services;
+    static String TAG = "Flame::FlameHost";
 
-    public FlameHost(String n) {
-        name = n;
+    ArrayList<FlameService> services;
+    ArrayList<String> identifiers;
+
+    public FlameHost(FlameService service) {
+        identifiers = new ArrayList<String>();
         services = new ArrayList<FlameService>();
+        addService(service);
+    }
+
+    public boolean matchesService(FlameService service) {
+        ArrayList<String> serviceIdentifiers = service.getHostIdentifiers();
+        for (String identifier : identifiers) {
+            Log.v(TAG, "looking for " + identifier + " in " + serviceIdentifiers);
+            if (serviceIdentifiers.contains(identifier)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getIdentifier() {
+        if (identifiers.isEmpty()) {
+            return "<unknown>";
+        }
+        return identifiers.get(0);
     }
 
     public void addService(FlameService s) {
+        identifiers.addAll(s.getHostIdentifiers());
         services.add(s);
-    }
-
-    public void removeService(FlameService s) {
-        services.remove(s);
     }
 
     public ArrayList<FlameService> getServices() {
         return services;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public String getTitle() {
-        return name;
+        return getIdentifier();
     }
 
 }

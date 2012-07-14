@@ -82,15 +82,13 @@ public class MyApplication extends Application {
         return hosts;
     }
 
-    public FlameHost getHost(String name) {
+    public FlameHost getHost(String identifier) {
         for (FlameHost host : hosts) {
-            if (host.getName().equals(name)) {
+            if (host.getIdentifier().equals(identifier)) {
                 return host;
             }
         }
-        // return something with the right name at least
-        // so that we can resume to a view of a host and have it work
-        return new FlameHost(name);
+        return null;
     }
 
     public FlameService getService(String serviceName) {

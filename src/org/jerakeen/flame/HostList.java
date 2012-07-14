@@ -38,10 +38,11 @@ public class HostList extends ListActivity implements FlameListener {
     }
 
     public void updatedHosts() {
+        Log.v(TAG, "updatedHosts");
         arrayAdapter.clear();
         MyApplication app = (MyApplication)getApplication();
         for (FlameHost host : app.getHosts()) {
-            arrayAdapter.add( host.getTitle() );
+            arrayAdapter.add(host.getTitle());
         }
         arrayAdapter.notifyDataSetChanged();
     }
@@ -52,8 +53,8 @@ public class HostList extends ListActivity implements FlameListener {
         MyApplication app = (MyApplication)getApplication();
         FlameHost host = app.getHosts().get(position);
         Intent intent = new Intent(this, HostView.class);
-        Log.v(TAG, "tapped host " + host.getName());
-        intent.putExtra("hostName", host.getName());
+        Log.v(TAG, "tapped host " + host.getTitle());
+        intent.putExtra("hostIdentifier", host.getIdentifier());
         startActivity(intent);
     }
 
