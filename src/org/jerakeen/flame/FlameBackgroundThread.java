@@ -75,19 +75,17 @@ public class FlameBackgroundThread implements Runnable, ServiceTypeListener, Ser
 
     public void serviceTypeAdded(ServiceEvent event) {
         Log.v(TAG, "new type: " + event.getType());
-        final String type = event.getType();
-        event.getDNS().addServiceListener(type, this);
+        event.getDNS().addServiceListener(event.getType(), this);
     }
 
     public void subTypeForServiceTypeAdded(ServiceEvent event) {
         Log.v(TAG, "subTypeForServiceTypeAdded " + event);
-        final String type = event.getType();
-        event.getDNS().addServiceListener(type, this);
+//        event.getDNS().addServiceListener(event.getType(), this);
     }
 
     public void serviceAdded(ServiceEvent event) {
         Log.v(TAG, "serviceAdded: " + event.getName() + " / " + event.getType());
-        event.getDNS().requestServiceInfo(event.getType(), event.getName());
+//        event.getDNS().requestServiceInfo(event.getType(), event.getName(), true);
     }
 
     public void serviceRemoved(ServiceEvent event) {
@@ -135,18 +133,15 @@ public class FlameBackgroundThread implements Runnable, ServiceTypeListener, Ser
     public ArrayList<FlameHost> getHosts() {
         ArrayList<FlameHost> hosts = new ArrayList<FlameHost>();
         for (FlameService service : getServices()) {
-            Log.v(TAG, "considering " + service + " identified by " + service.getHostIdentifiers());
             boolean added = false;
             for (FlameHost host : hosts) {
                 if (host.matchesService(service)) {
-                    Log.v(TAG, "found matching host");
                     host.addService(service);
                     added = true;
                     break;
                 }
             }
             if (!added) {
-                Log.v(TAG, "creating host");
                 FlameHost host = new FlameHost(service);
                 hosts.add(host);
             }

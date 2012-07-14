@@ -64,6 +64,8 @@ public class HostList extends ListActivity implements FlameListener {
         Log.v(TAG, "onStop");
         MyApplication app = (MyApplication)getApplication();
         app.removeListener(this);
+        arrayAdapter.clear();
+        arrayAdapter.notifyDataSetChanged();
     }
 
     @Override

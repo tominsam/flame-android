@@ -70,10 +70,14 @@ public class HostView extends ListActivity implements FlameListener {
     @Override
     public void updatedHosts() {
         FlameHost host = getHost();
-        setTitle(host.getTitle());
         arrayAdapter.clear();
-        for (FlameService service : host.getServices()) {
-            arrayAdapter.add(service.toString());
+        if (host != null) {
+            setTitle(host.getTitle());
+            for (FlameService service : host.getServices()) {
+                arrayAdapter.add(service.toString());
+            }
+        } else {
+            setTitle(hostName);
         }
         arrayAdapter.notifyDataSetChanged();
     }
@@ -95,6 +99,8 @@ public class HostView extends ListActivity implements FlameListener {
         Log.v(TAG, "onStop");
         MyApplication app = (MyApplication)getApplication();
         app.removeListener(this);
+        arrayAdapter.clear();
+        arrayAdapter.notifyDataSetChanged();
     }
 
     @Override
