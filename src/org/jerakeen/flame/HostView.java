@@ -11,11 +11,10 @@ import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 
 public class HostView extends ListActivity implements FlameListener {
-    static String TAG = "HostList::HostView";
+    static String TAG = "Flame::HostView";
 
     String hostName;
     ArrayAdapter<String> arrayAdapter;
-    ArrayList<String> names;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +37,12 @@ public class HostView extends ListActivity implements FlameListener {
         setListAdapter(arrayAdapter);
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.v(TAG, "onStart");
         MyApplication app = (MyApplication)getApplication();
         app.addListener(this);
         updatedHosts();
@@ -68,9 +72,16 @@ public class HostView extends ListActivity implements FlameListener {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
+        Log.v(TAG, "onStop");
         MyApplication app = (MyApplication)getApplication();
         app.removeListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.v(TAG, "onDestroy");
     }
 }

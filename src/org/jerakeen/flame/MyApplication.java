@@ -32,18 +32,11 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Log.v(TAG, "onCreate");
-
         android.net.wifi.WifiManager wifi = (android.net.wifi.WifiManager)getSystemService(android.content.Context.WIFI_SERVICE);
         lock = wifi.createMulticastLock("FlameWifiLock");
-        lock.setReferenceCounted(true);
-        lock.acquire();
-
+        lock.setReferenceCounted(false);
         hosts = new ArrayList<FlameHost>();
         listeners = new ArrayList<FlameListener>();
-
-        task = new FlameBackgroundThread(handler, updateRunnable);
-        Thread t = new Thread(task);
-        t.start();
     }
 
     @Override
@@ -60,11 +53,29 @@ public class MyApplication extends Application {
     }
 
     public void addListener(FlameListener l) {
-        listeners.add(l);
+        Log.v(TAG, "addListener " + l);
+        if (listeners.isEmpty()) {
+            listeners.add(l);
+            Log.v(TAG, "acquiring wifi lock and starting search");
+            lock.acquire();
+            task = new FlameBackgroundThread(handler, updateRunnable);
+            Thread t = new Thread(task);
+            t.start();
+
+        } else {
+            listeners.add(l);
+        }
     }
 
     public void removeListener(FlameListener l) {
+        Log.v(TAG, "removeListener " + l);
         listeners.remove(l);
+        if (listeners.isEmpty()) {
+            Log.v(TAG, "dropping wifi lock and stopping task");
+            lock.release();
+            task.stop();
+            task = null;
+        }
     }
 
     public ArrayList<FlameHost> getHosts() {
@@ -80,14 +91,4 @@ public class MyApplication extends Application {
         return new FlameHost(name);
     }
 
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-        Log.v(TAG, "onTerminate");
-        task.stop();
-        task = null;
-        if (lock != null) {
-            lock.release();
-        }
-    }
 }

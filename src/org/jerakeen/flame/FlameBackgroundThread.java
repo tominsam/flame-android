@@ -37,20 +37,24 @@ public class FlameBackgroundThread implements Runnable, ServiceTypeListener, Ser
         services = new ArrayList<FlameService>();
         serviceListLock = new ReentrantLock();
         latch = new CountDownLatch(1);
-        running = true;
     }
 
     public void run() {
+        Log.v(TAG, "running");
+        running = true;
         try {
             jmdns = JmDNS.create();
             jmdns.addServiceTypeListener(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        handler.post(update);
+        if (handler != null && update != null) {
+            handler.post(update);
+        }
+
+        Log.v(TAG, "jmdns is " + jmdns);
 
         // have to keep the thread alive now.
-
         Log.v(TAG, "holding thread on latch");
         while (running) {
             try {
@@ -88,7 +92,9 @@ public class FlameBackgroundThread implements Runnable, ServiceTypeListener, Ser
         serviceListLock.lock();
         services.add(new FlameService(event, info));
         serviceListLock.unlock();
-        handler.post(update);
+        if (handler != null && update != null) {
+            handler.post(update);
+        }
     }
 
     public void serviceRemoved(ServiceEvent event) {
@@ -96,7 +102,9 @@ public class FlameBackgroundThread implements Runnable, ServiceTypeListener, Ser
         serviceListLock.lock();
         services.remove(new FlameService(event));
         serviceListLock.unlock();
-        handler.post(update);
+        if (handler != null && update != null) {
+            handler.post(update);
+        }
     }
 
     public void serviceResolved(ServiceEvent event) {
@@ -104,7 +112,10 @@ public class FlameBackgroundThread implements Runnable, ServiceTypeListener, Ser
     }
 
     public void stop() {
+        Log.v(TAG, "stopping");
         running = false;
+        handler = null;
+        update = null;
         latch.countDown();
     }
 

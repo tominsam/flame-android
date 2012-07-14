@@ -16,7 +16,7 @@ import android.widget.ListView;
 
 
 public class HostList extends ListActivity implements FlameListener {
-    static String TAG = "HostList::HostList";
+    static String TAG = "Flame::HostList";
 
     ArrayAdapter<String> arrayAdapter;
 
@@ -26,14 +26,14 @@ public class HostList extends ListActivity implements FlameListener {
         Log.v(TAG, "onCreate");
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item_1, new ArrayList<String>());
         setListAdapter(arrayAdapter);
-        MyApplication app = (MyApplication)getApplication();
-        app.addListener(this);
-        updatedHosts();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        Log.v(TAG, "onStart");
+        MyApplication app = (MyApplication)getApplication();
+        app.addListener(this);
         updatedHosts();
     }
 
@@ -58,10 +58,16 @@ public class HostList extends ListActivity implements FlameListener {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
+        Log.v(TAG, "onStop");
         MyApplication app = (MyApplication)getApplication();
         app.removeListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
 
