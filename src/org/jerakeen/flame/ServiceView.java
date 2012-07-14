@@ -1,21 +1,19 @@
 package org.jerakeen.flame;
 
-import android.*;
-import android.app.ListActivity;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class HostView extends ListActivity implements FlameListener {
+public class ServiceView extends Activity implements FlameListener {
+
     static String TAG = "Flame::HostView";
 
-    String hostName;
+    String serviceName;
     ArrayAdapter<String> arrayAdapter;
 
     @Override
@@ -29,14 +27,12 @@ public class HostView extends ListActivity implements FlameListener {
             return;
         }
 
-        hostName = intent.getExtras().getString("hostName");
-        if (hostName == null) {
+        serviceName = intent.getExtras().getString("serviceName");
+        if (serviceName == null) {
             finish();
             return;
         }
 
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
-        setListAdapter(arrayAdapter);
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -50,6 +46,7 @@ public class HostView extends ListActivity implements FlameListener {
         updatedHosts();
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -61,32 +58,19 @@ public class HostView extends ListActivity implements FlameListener {
         }
     }
 
-    FlameHost getHost() {
+    FlameService getService() {
         MyApplication app = (MyApplication)getApplication();
-        FlameHost host = app.getHost(hostName);
-        return host;
+        return app.getService(serviceName);
     }
 
     @Override
     public void updatedHosts() {
-        FlameHost host = getHost();
-        setTitle(host.getTitle());
-        arrayAdapter.clear();
-        for (FlameService service : host.getServices()) {
-            arrayAdapter.add(service.toString());
+        FlameService service = getService();
+        if (service == null) {
+            setTitle(serviceName);
+            return;
         }
-        arrayAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        FlameHost host = getHost();
-        FlameService service = host.getServices().get(position);
-        Intent intent = new Intent(this, ServiceView.class);
-        Log.v(TAG, "tapped service " + service);
-        intent.putExtra("serviceName", service.toString());
-        startActivity(intent);
+        setTitle(service.toString());
     }
 
     @Override
@@ -102,4 +86,6 @@ public class HostView extends ListActivity implements FlameListener {
         super.onDestroy();
         Log.v(TAG, "onDestroy");
     }
+
+
 }

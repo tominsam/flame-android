@@ -21,6 +21,12 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ServiceView" android:label="Single Service">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 	<uses-permission android:name="android.permission.INTERNET"/>

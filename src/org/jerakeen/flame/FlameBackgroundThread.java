@@ -52,8 +52,6 @@ public class FlameBackgroundThread implements Runnable, ServiceTypeListener, Ser
             handler.post(update);
         }
 
-        Log.v(TAG, "jmdns is " + jmdns);
-
         // have to keep the thread alive now.
         Log.v(TAG, "holding thread on latch");
         while (running) {
@@ -72,6 +70,7 @@ public class FlameBackgroundThread implements Runnable, ServiceTypeListener, Ser
         serviceListLock.lock();
         services.clear();
         serviceListLock.unlock();
+        Log.v(TAG, "thread finished");
     }
 
     public void serviceTypeAdded(ServiceEvent event) {
