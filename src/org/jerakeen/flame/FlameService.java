@@ -4,7 +4,7 @@ import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
 
 public class FlameService  {
-    static String TAG = "Flame::FlameService";
+    static String TAG = "HostList::FlameService";
 
     ServiceEvent service;
     ServiceInfo info;

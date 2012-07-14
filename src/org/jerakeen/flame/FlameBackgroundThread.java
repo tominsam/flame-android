@@ -12,7 +12,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class FlameBackgroundThread implements Runnable, ServiceTypeListener, ServiceListener {
-    static String TAG = "Flame::FlameBackgroundTask";
+    static String TAG = "HostList::FlameBackgroundTask";
 
     // my services resolver
     JmDNS jmdns;
@@ -128,6 +128,7 @@ public class FlameBackgroundThread implements Runnable, ServiceTypeListener, Ser
                 host = new FlameHost(service.getName());
                 map.put(host.getName(), host);
             }
+            host.addService(service);
         }
         return new ArrayList<FlameHost>(map.values());
     }
