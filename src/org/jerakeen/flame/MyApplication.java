@@ -13,7 +13,7 @@ interface FlameListener {
 }
 
 public class MyApplication extends Application {
-    static String TAG = "HostList::MyApplication";
+    static String TAG = "Flame::MyApplication";
 
     android.net.wifi.WifiManager.MulticastLock lock;
     FlameBackgroundThread task;
