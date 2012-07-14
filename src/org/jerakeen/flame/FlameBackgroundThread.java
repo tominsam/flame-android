@@ -87,13 +87,7 @@ public class FlameBackgroundThread implements Runnable, ServiceTypeListener, Ser
 
     public void serviceAdded(ServiceEvent event) {
         Log.v(TAG, "serviceAdded: " + event.getName() + " / " + event.getType());
-        ServiceInfo info = event.getDNS().getServiceInfo(event.getType(), event.getName(), 0);
-        serviceListLock.lock();
-        services.add(new FlameService(event));
-        serviceListLock.unlock();
-        if (handler != null && update != null) {
-            handler.post(update);
-        }
+        event.getDNS().requestServiceInfo(event.getType(), event.getName());
     }
 
     public void serviceRemoved(ServiceEvent event) {
@@ -108,6 +102,14 @@ public class FlameBackgroundThread implements Runnable, ServiceTypeListener, Ser
 
     public void serviceResolved(ServiceEvent event) {
         Log.v(TAG, "serviceResolved: " + event.getName() + " / " + event.getType());
+
+        serviceListLock.lock();
+        services.add(new FlameService(event));
+        serviceListLock.unlock();
+
+        if (handler != null && update != null) {
+            handler.post(update);
+        }
     }
 
     public void stop() {

@@ -17,17 +17,12 @@ public class FlameService  {
         service = s;
         hostIdentifiers = new ArrayList<String>();
         if (service.getInfo() != null) {
-            hostIdentifiers.add(toString());
             hostIdentifiers.add(service.getInfo().getServer());
             for (String address : service.getInfo().getHostAddresses()) {
                 hostIdentifiers.add(address);
             }
-            for (InetAddress address : service.getInfo().getInetAddresses()) {
-                hostIdentifiers.add(address.toString());
-            }
-            for (String url : service.getInfo().getURLs()) {
-                hostIdentifiers.add(url);
-            }
+            hostIdentifiers.add(toString());
+            Log.v(TAG, "hostIdentifiers for " + this + " are " + hostIdentifiers);
         }
     }
 

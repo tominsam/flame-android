@@ -20,7 +20,6 @@ public class FlameHost {
     public boolean matchesService(FlameService service) {
         ArrayList<String> serviceIdentifiers = service.getHostIdentifiers();
         for (String identifier : identifiers) {
-            Log.v(TAG, "looking for " + identifier + " in " + serviceIdentifiers);
             if (serviceIdentifiers.contains(identifier)) {
                 return true;
             }
