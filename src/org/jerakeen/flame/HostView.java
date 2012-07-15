@@ -1,6 +1,5 @@
 package org.jerakeen.flame;
 
-import android.*;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +15,7 @@ public class HostView extends ListActivity implements FlameListener {
     static String TAG = "Flame::HostView";
 
     String hostName;
-    ArrayAdapter<String> arrayAdapter;
+    PrettyServiceListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +34,8 @@ public class HostView extends ListActivity implements FlameListener {
             return;
         }
 
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
-        setListAdapter(arrayAdapter);
+        adapter = new PrettyServiceListAdapter(this);
+        setListAdapter(adapter);
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -70,16 +69,13 @@ public class HostView extends ListActivity implements FlameListener {
     @Override
     public void updatedHosts() {
         FlameHost host = getHost();
-        arrayAdapter.clear();
         if (host != null) {
             setTitle(host.getTitle());
-            for (FlameService service : host.getServices()) {
-                arrayAdapter.add(service.toString());
-            }
+            adapter.setServices(host.getServices());
         } else {
             setTitle(hostName);
+            adapter.setServices(new ArrayList<FlameService>());
         }
-        arrayAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -99,8 +95,7 @@ public class HostView extends ListActivity implements FlameListener {
         Log.v(TAG, "onStop");
         MyApplication app = (MyApplication)getApplication();
         app.removeListener(this);
-        arrayAdapter.clear();
-        arrayAdapter.notifyDataSetChanged();
+        adapter.setServices(new ArrayList<FlameService>());
     }
 
     @Override

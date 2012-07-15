@@ -46,7 +46,15 @@ public class FlameService  {
         return ((FlameService) o).toString().equals(toString());
     }
 
-    public String getName() {
+    public String getIdentifier() {
         return service.getName();
+    }
+
+    public String getTitle() {
+        return service.getName();
+    }
+
+    public String getSubTitle() {
+        return service.getType();
     }
 }

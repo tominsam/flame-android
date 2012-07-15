@@ -70,7 +70,7 @@ public class ServiceView extends Activity implements FlameListener {
             setTitle(serviceName);
             return;
         }
-        setTitle(service.toString());
+        setTitle(service.getTitle());
     }
 
     @Override

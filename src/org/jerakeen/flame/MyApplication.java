@@ -45,7 +45,7 @@ public class MyApplication extends Application {
     }
 
     private void updateFromBackground() {
-        Log.v(TAG, "hosts updated");
+        Log.v(TAG, "services updated");
         hosts = task.getHosts();
         for (FlameListener a : listeners) {
             a.updatedHosts();
@@ -91,10 +91,10 @@ public class MyApplication extends Application {
         return null;
     }
 
-    public FlameService getService(String serviceName) {
+    public FlameService getService(String identifier) {
         for (FlameHost host : hosts) {
             for (FlameService service : host.getServices()) {
-                if (service.getName().equals(serviceName)) {
+                if (service.toString().equals(identifier)) {
                     return service;
                 }
             }
