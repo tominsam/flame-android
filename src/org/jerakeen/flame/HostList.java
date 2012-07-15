@@ -2,13 +2,10 @@ package org.jerakeen.flame;
 
 import java.util.ArrayList;
 
-import android.*;
 import android.R;
 import android.app.ListActivity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,14 +15,14 @@ import android.widget.ListView;
 public class HostList extends ListActivity implements FlameListener {
     static String TAG = "Flame::HostList";
 
-    ArrayAdapter<String> arrayAdapter;
+    PrettyHostListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.v(TAG, "onCreate");
-        arrayAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item_1, new ArrayList<String>());
-        setListAdapter(arrayAdapter);
+        adapter = new PrettyHostListAdapter(this);
+        setListAdapter(adapter);
     }
 
     @Override
@@ -39,12 +36,8 @@ public class HostList extends ListActivity implements FlameListener {
 
     public void updatedHosts() {
         Log.v(TAG, "updatedHosts");
-        arrayAdapter.clear();
         MyApplication app = (MyApplication)getApplication();
-        for (FlameHost host : app.getHosts()) {
-            arrayAdapter.add(host.getTitle());
-        }
-        arrayAdapter.notifyDataSetChanged();
+        adapter.setHosts(app.getHosts());
     }
 
     @Override
@@ -64,8 +57,7 @@ public class HostList extends ListActivity implements FlameListener {
         Log.v(TAG, "onStop");
         MyApplication app = (MyApplication)getApplication();
         app.removeListener(this);
-        arrayAdapter.clear();
-        arrayAdapter.notifyDataSetChanged();
+        adapter.setHosts(new ArrayList<FlameHost>());
     }
 
     @Override
