@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -38,6 +39,26 @@ public class HostView extends ListActivity implements FlameListener {
         setListAdapter(adapter);
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuItem reload = menu.add(0, Menu.NONE, 0, "Reload");
+        reload.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        reload.setIcon(R.drawable.menu_refresh);
+        reload.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        reload.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Log.v(TAG, "reload");
+                MyApplication app = (MyApplication)getApplication();
+                app.reload();
+                return true;
+            }
+        });
+
+        super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override

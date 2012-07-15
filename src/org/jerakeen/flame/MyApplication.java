@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 interface FlameListener {
     public void updatedHosts();
@@ -47,6 +49,15 @@ public class MyApplication extends Application {
     private void updateFromBackground() {
         Log.v(TAG, "services updated");
         hosts = task.getHosts();
+
+        // alpha-sort by title
+        Collections.sort(hosts, new Comparator<FlameHost>() {
+            @Override
+            public int compare(FlameHost flameHost, FlameHost flameHost1) {
+                return flameHost.getTitle().toLowerCase().compareTo(flameHost1.getTitle().toLowerCase());
+            }
+        });
+
         for (FlameListener a : listeners) {
             a.updatedHosts();
         }
@@ -100,5 +111,17 @@ public class MyApplication extends Application {
             }
         }
         return null;
+    }
+
+    public void reload() {
+        task.stop();
+
+        task = new FlameBackgroundThread(handler, updateRunnable);
+
+        // will send a blank list out
+        updateFromBackground();
+
+        Thread t = new Thread(task);
+        t.start();
     }
 }

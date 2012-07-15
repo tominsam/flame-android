@@ -2,13 +2,15 @@ package org.jerakeen.flame;
 
 import java.util.ArrayList;
 
-import android.R;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 
@@ -23,6 +25,26 @@ public class HostList extends ListActivity implements FlameListener {
         Log.v(TAG, "onCreate");
         adapter = new PrettyHostListAdapter(this);
         setListAdapter(adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuItem reload = menu.add(0, Menu.NONE, 0, "Reload");
+        reload.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        reload.setIcon(R.drawable.menu_refresh);
+        reload.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        reload.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Log.v(TAG, "reload");
+                MyApplication app = (MyApplication)getApplication();
+                app.reload();
+                return true;
+            }
+        });
+
+        super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override

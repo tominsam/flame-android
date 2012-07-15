@@ -6,6 +6,7 @@ import android.util.Log;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class FlameHost {
     static String TAG = "Flame::FlameHost";
@@ -44,6 +45,18 @@ public class FlameHost {
     public void addService(FlameService s) {
         identifiers.addAll(s.getHostIdentifiers());
         services.add(s);
+
+        Collections.sort(services, new Comparator<FlameService>() {
+            @Override
+            public int compare(FlameService flameService, FlameService flameService1) {
+                int p1 = flameService.getServiceLookup().priority;
+                int p2 = flameService1.getServiceLookup().priority;
+                if (p1 == p2) {
+                    return flameService.getTitle().toLowerCase().compareTo(flameService1.getTitle().toLowerCase());
+                }
+                return p2 - p1;
+            }
+        });
     }
 
     public ArrayList<FlameService> getServices() {
