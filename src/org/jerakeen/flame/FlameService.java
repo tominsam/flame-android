@@ -6,12 +6,15 @@ import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FlameService  {
     static String TAG = "Flame::FlameService";
 
     ServiceEvent service;
     ArrayList<String> hostIdentifiers;
+    ServiceLookup serviceLookup;
 
     public FlameService(ServiceEvent s) {
         service = s;
@@ -26,7 +29,8 @@ public class FlameService  {
                 }
             }
             hostIdentifiers.add(toString());
-            Log.v(TAG, "hostIdentifiers for " + this + " are " + hostIdentifiers);
+
+            serviceLookup = ServiceLookup.get(service.getInfo().getApplication());
         }
     }
 
@@ -65,14 +69,21 @@ public class FlameService  {
     }
 
     public String getTitle() {
-        return service.getName();
-    }
-
-    public String getSubTitle() {
+        Log.v(TAG, "app is " + service.getInfo().getApplication());
+        if (serviceLookup != null) {
+            return serviceLookup.description;
+        }
         return service.getType();
     }
 
+    public String getSubTitle() {
+        return service.getName();
+    }
+
     public int getImageResource() {
+        if (serviceLookup != null) {
+            return serviceLookup.drawable;
+        }
         return R.drawable.gear2;
     }
 
