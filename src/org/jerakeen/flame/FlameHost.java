@@ -3,6 +3,7 @@ package org.jerakeen.flame;
 import android.nfc.Tag;
 import android.util.Log;
 
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 public class FlameHost {
@@ -45,6 +46,17 @@ public class FlameHost {
 
     public String getTitle() {
         return getIdentifier();
+    }
+
+    public String getSubTitle() {
+        if (services.isEmpty()) {
+            return "";
+        }
+        return services.get(0).getIPAddress();
+    }
+
+    public int getImageResource() {
+        return R.drawable.macbook;
     }
 
 }

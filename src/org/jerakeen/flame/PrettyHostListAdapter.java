@@ -56,8 +56,8 @@ public class PrettyHostListAdapter extends BaseAdapter {
         }
 
         ((TextView)rowView.findViewById(R.id.title)).setText(host.getTitle());
-        ((TextView)rowView.findViewById(R.id.subtitle)).setText(host.getTitle());
-        ((ImageView)rowView.findViewById(R.id.hostImage)).setImageResource(R.drawable.macbook);
+        ((TextView)rowView.findViewById(R.id.subtitle)).setText(host.getSubTitle());
+        ((ImageView)rowView.findViewById(R.id.hostImage)).setImageResource(host.getImageResource());
 
         return rowView;
     }

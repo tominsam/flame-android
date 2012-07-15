@@ -57,7 +57,7 @@ public class PrettyServiceListAdapter extends BaseAdapter {
 
         ((TextView)rowView.findViewById(R.id.title)).setText(service.getTitle());
         ((TextView)rowView.findViewById(R.id.subtitle)).setText(service.getSubTitle());
-        ((ImageView)rowView.findViewById(R.id.hostImage)).setImageResource(R.drawable.gear2);
+        ((ImageView)rowView.findViewById(R.id.hostImage)).setImageResource(service.getImageResource());
 
         return rowView;
     }

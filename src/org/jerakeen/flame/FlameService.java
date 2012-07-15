@@ -46,6 +46,20 @@ public class FlameService  {
         return ((FlameService) o).toString().equals(toString());
     }
 
+    public ServiceInfo getInfo() {
+        return service.getInfo();
+    }
+
+    public String getIPAddress() {
+        for (String address : service.getInfo().getHostAddresses()) {
+            if (!address.isEmpty()) {
+                return address;
+            }
+        }
+        return "No address";
+    }
+
+
     public String getIdentifier() {
         return service.getName();
     }
@@ -57,4 +71,9 @@ public class FlameService  {
     public String getSubTitle() {
         return service.getType();
     }
+
+    public int getImageResource() {
+        return R.drawable.gear2;
+    }
+
 }
