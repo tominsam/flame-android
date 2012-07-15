@@ -63,6 +63,9 @@ public class FlameService  {
         return "No address";
     }
 
+    public ServiceLookup getServiceLookup() {
+        return serviceLookup;
+    }
 
     public String getIdentifier() {
         return service.getName();
