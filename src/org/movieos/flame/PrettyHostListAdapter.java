@@ -1,4 +1,4 @@
-package org.jerakeen.flame;
+package org.movieos.flame;
 
 import android.app.Activity;
 import android.content.Context;

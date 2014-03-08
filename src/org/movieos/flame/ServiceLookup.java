@@ -1,9 +1,9 @@
-package org.jerakeen.flame;
+package org.movieos.flame;
 
 import java.util.HashMap;
 
 public class ServiceLookup implements Comparable {
-    static HashMap<String, ServiceLookup> lookup = new HashMap<String, ServiceLookup>();
+    static HashMap<String, ServiceLookup> lookup = new HashMap<>();
     public static void register(String name, String description, int drawable, int priority) {
         ServiceLookup s = new ServiceLookup(name, description, drawable, priority);
         lookup.put(s.name, s);
@@ -38,7 +38,6 @@ public class ServiceLookup implements Comparable {
 
         // atc
         // 16122
-
 
         // this list built with the service_list_builder script, though I've added my own custom icons, which
         // is a pain
@@ -616,7 +615,8 @@ public class ServiceLookup implements Comparable {
     @Override
     public int compareTo(Object o) {
         if (o instanceof ServiceLookup) {
-            return new Integer(priority).compareTo(new Integer(((ServiceLookup) o).priority));
+            ServiceLookup s = (ServiceLookup) o;
+            return Integer.valueOf(priority).compareTo(s.priority);
         }
         return 0;
     }

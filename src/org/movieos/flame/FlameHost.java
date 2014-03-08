@@ -1,9 +1,7 @@
-package org.jerakeen.flame;
+package org.movieos.flame;
 
-import android.nfc.Tag;
 import android.util.Log;
 
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;

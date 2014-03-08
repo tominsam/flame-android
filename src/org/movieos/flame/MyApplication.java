@@ -1,6 +1,5 @@
-package org.jerakeen.flame;
+package org.movieos.flame;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.res.Configuration;
 import android.os.Handler;
@@ -37,8 +36,8 @@ public class MyApplication extends Application {
         android.net.wifi.WifiManager wifi = (android.net.wifi.WifiManager)getSystemService(android.content.Context.WIFI_SERVICE);
         lock = wifi.createMulticastLock("FlameWifiLock");
         lock.setReferenceCounted(false);
-        hosts = new ArrayList<FlameHost>();
-        listeners = new ArrayList<FlameListener>();
+        hosts = new ArrayList<>();
+        listeners = new ArrayList<>();
     }
 
     @Override

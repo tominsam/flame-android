@@ -1,4 +1,4 @@
-package org.jerakeen.flame;
+package org.movieos.flame;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-
-import java.util.ArrayList;
 
 public class ServiceView extends Activity implements FlameListener {
 

@@ -1,4 +1,4 @@
-package org.jerakeen.flame;
+package org.movieos.flame;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;

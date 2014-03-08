@@ -58,11 +58,11 @@ android {
                 android.sourceSets.live.res.srcDirs = ['live/res']
             }
             beta {
-                packageName 'com.jerakeen.flame.beta'
+                packageName 'com.movieos.flame.beta'
                 android.sourceSets.beta.res.srcDirs = ['beta/res']
             }
             alpha {
-                packageName 'com.jerakeen.flame.alpha'
+                packageName 'com.movieos.flame.alpha'
                 android.sourceSets.alpha.res.srcDirs = ['alpha/res']
             }
         }

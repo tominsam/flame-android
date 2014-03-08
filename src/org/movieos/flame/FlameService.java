@@ -1,13 +1,11 @@
-package org.jerakeen.flame;
+package org.movieos.flame;
 
 import android.util.Log;
 
 import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
-import java.net.InetAddress;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class FlameService  {
     static String TAG = "Flame::FlameService";
