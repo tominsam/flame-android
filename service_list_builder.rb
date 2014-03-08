@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 require 'open-uri'
+#require 'json'
 
 url = "http://www.dns-sd.org/ServiceTypes.html"
 
@@ -12,9 +13,14 @@ end
 
 lines = data.split(/[\r\n]+/)
 
+services = []
+
 for line in lines
     match = line.match(/^<b>(.*?)<\/b>\s+(.*)/)
-    if match
-        puts "register(\"#{match[1]}\", \"#{match[2].gsub(/"/,"\\\"").gsub(/<.*?>/,'')}\", R.drawable.gear2);\n"
-    end
+    services.push({
+        "slug" => match[1],
+        "name" => match[2],
+    })
 end
+
+print services

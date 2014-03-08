@@ -32,7 +32,13 @@ public class ServiceLookup implements Comparable {
         register("acp-sync", "Internet gateway device configuration protocol", R.drawable.router, 0);
         register("appletv-v2", "Apple TV", R.drawable.tv, 5);
         register("airplay", "Airplay", R.drawable.note, 4);
-        register("slipstreamrem", "Slipstream / Spotify?", R.drawable.note, 0);
+        register("slipstreamrem", "Slipstream / Spotify?", R.drawable.note, 0); // TODO spotify only?
+        register("hudson", "Hudson build server console", R.drawable.spiderweb, 0);
+        register("apple-mobdev", "iOS remote development / sync", R.drawable.iphone, 0); // TODO not sure about this one
+
+        // atc
+        // 16122
+
 
         // this list built with the service_list_builder script, though I've added my own custom icons, which
         // is a pain
@@ -248,7 +254,7 @@ public class ServiceLookup implements Comparable {
         register("inova-ontrack", "Inova Solutions OnTrack Display Protocol", R.drawable.gear2, 0);
         register("idcws", "Intermec Device Configuration Web Services", R.drawable.gear2, 0);
         register("ipbroadcaster", "IP Broadcaster", R.drawable.gear2, 0);
-        register("ipp", "IPP (Internet Printing Protocol)", R.drawable.gear2, 0);
+        register("ipp", "IPP (Internet Printing Protocol)", R.drawable.printer, 0);
         register("ipspeaker", "IP Speaker Control Protocol", R.drawable.speaker, 0);
         register("irelay", "iRelay application discovery service", R.drawable.gear2, 0);
         register("irmc", "Intego Remote Management Console", R.drawable.gear2, 0);

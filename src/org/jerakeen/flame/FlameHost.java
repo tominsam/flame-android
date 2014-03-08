@@ -49,8 +49,8 @@ public class FlameHost {
         Collections.sort(services, new Comparator<FlameService>() {
             @Override
             public int compare(FlameService flameService, FlameService flameService1) {
-                int p1 = flameService.getServiceLookup().priority;
-                int p2 = flameService1.getServiceLookup().priority;
+                int p1 = flameService.getServiceLookup() != null ? flameService.getServiceLookup().priority : -1;
+                int p2 = flameService1.getServiceLookup() != null ? flameService1.getServiceLookup().priority : -1;
                 if (p1 == p2) {
                     return flameService.getTitle().toLowerCase().compareTo(flameService1.getTitle().toLowerCase());
                 }
