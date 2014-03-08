@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 public class ServiceLookup implements Comparable {
     static HashMap<String, ServiceLookup> lookup = new HashMap<>();
+
     public static void register(String name, String description, int drawable, int priority) {
         ServiceLookup s = new ServiceLookup(name, description, drawable, priority);
         lookup.put(s.name, s);
@@ -620,4 +621,19 @@ public class ServiceLookup implements Comparable {
         }
         return 0;
     }
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getDrawable() {
+        return drawable;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
 }
+
+

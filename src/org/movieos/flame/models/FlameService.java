@@ -1,4 +1,4 @@
-package org.movieos.flame;
+package org.movieos.flame.models;
 
 import android.util.Log;
 
@@ -6,6 +6,9 @@ import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
 
 import java.util.ArrayList;
+
+import org.movieos.flame.R;
+import org.movieos.flame.ServiceLookup;
 
 public class FlameService  {
     static String TAG = "Flame::FlameService";
@@ -72,7 +75,7 @@ public class FlameService  {
     public String getTitle() {
         Log.v(TAG, "app is " + service.getInfo().getApplication());
         if (serviceLookup != null) {
-            return serviceLookup.description;
+            return serviceLookup.getDescription();
         }
         return service.getType();
     }
@@ -83,7 +86,7 @@ public class FlameService  {
 
     public int getImageResource() {
         if (serviceLookup != null) {
-            return serviceLookup.drawable;
+            return serviceLookup.getDrawable();
         }
         return R.drawable.gear2;
     }

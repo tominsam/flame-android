@@ -1,4 +1,4 @@
-package org.movieos.flame;
+package org.movieos.flame.activities;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -11,7 +11,13 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class HostView extends ListActivity implements FlameListener {
+import org.movieos.flame.models.FlameHost;
+import org.movieos.flame.models.FlameService;
+import org.movieos.flame.MyApplication;
+import org.movieos.flame.utilities.PrettyServiceListAdapter;
+import org.movieos.flame.R;
+
+public class HostView extends ListActivity implements MyApplication.FlameListener {
     static String TAG = "Flame::HostView";
 
     String hostName;

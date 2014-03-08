@@ -1,4 +1,4 @@
-package org.movieos.flame;
+package org.movieos.flame.activities;
 
 import java.util.ArrayList;
 
@@ -11,8 +11,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import org.movieos.flame.models.FlameHost;
+import org.movieos.flame.MyApplication;
+import org.movieos.flame.utilities.PrettyHostListAdapter;
+import org.movieos.flame.R;
 
-public class HostList extends ListActivity implements FlameListener {
+
+public class HostList extends ListActivity implements MyApplication.FlameListener {
     static String TAG = "Flame::HostList";
 
     PrettyHostListAdapter adapter;

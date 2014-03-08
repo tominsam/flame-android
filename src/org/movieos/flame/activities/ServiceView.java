@@ -1,4 +1,4 @@
-package org.movieos.flame;
+package org.movieos.flame.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,7 +7,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
-public class ServiceView extends Activity implements FlameListener {
+import org.movieos.flame.models.FlameService;
+import org.movieos.flame.MyApplication;
+
+public class ServiceView extends Activity implements MyApplication.FlameListener {
 
     static String TAG = "Flame::HostView";
 

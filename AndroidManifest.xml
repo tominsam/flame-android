@@ -14,20 +14,20 @@
                  android:allowBackup="true"
         >
 
-        <activity android:name=".HostList" android:label="@string/app_name">
+        <activity android:name=".activities.HostList" android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".HostView" android:label="Single Host">
+        <activity android:name=".activities.HostView" android:label="Single Host">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".ServiceView" android:label="Single Service">
+        <activity android:name=".activities.ServiceView" android:label="Single Service">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>

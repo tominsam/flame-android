@@ -1,4 +1,4 @@
-package org.movieos.flame;
+package org.movieos.flame.models;
 
 import android.util.Log;
 
@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
 
+import org.movieos.flame.R;
+import org.movieos.flame.ServiceLookup;
+
 public class FlameHost {
     static String TAG = "Flame::FlameHost";
 
@@ -14,8 +17,8 @@ public class FlameHost {
     ArrayList<String> identifiers;
 
     public FlameHost(FlameService service) {
-        identifiers = new ArrayList<String>();
-        services = new ArrayList<FlameService>();
+        identifiers = new ArrayList<>();
+        services = new ArrayList<>();
         addService(service);
     }
 
@@ -48,8 +51,8 @@ public class FlameHost {
         Collections.sort(services, new Comparator<FlameService>() {
             @Override
             public int compare(FlameService flameService, FlameService flameService1) {
-                int p1 = flameService.getServiceLookup() != null ? flameService.getServiceLookup().priority : -1;
-                int p2 = flameService1.getServiceLookup() != null ? flameService1.getServiceLookup().priority : -1;
+                int p1 = flameService.getServiceLookup() != null ? flameService.getServiceLookup().getPriority(): -1;
+                int p2 = flameService1.getServiceLookup() != null ? flameService1.getServiceLookup().getPriority() : -1;
                 if (p1 == p2) {
                     return flameService.getTitle().toLowerCase(Locale.getDefault()).compareTo(flameService1.getTitle().toLowerCase(Locale.getDefault()));
                 }
@@ -74,10 +77,10 @@ public class FlameHost {
     }
 
     public ServiceLookup getServiceLookup() {
-        ArrayList<ServiceLookup> lookups = new ArrayList<ServiceLookup>();
+        ArrayList<ServiceLookup> lookups = new ArrayList<>();
         for (FlameService service : getServices()) {
             ServiceLookup lookup = service.getServiceLookup();
-            if (lookup != null && lookup.priority > 0) {
+            if (lookup != null && lookup.getPriority() > 0) {
                 lookups.add(lookup);
             }
         }
@@ -92,7 +95,7 @@ public class FlameHost {
     public int getImageResource() {
         ServiceLookup lookup = getServiceLookup();
         if (lookup != null) {
-            return lookup.drawable;
+            return lookup.getDrawable();
         }
         return R.drawable.macbook;
     }

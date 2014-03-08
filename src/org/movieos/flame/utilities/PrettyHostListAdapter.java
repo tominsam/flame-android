@@ -1,4 +1,4 @@
-package org.movieos.flame;
+package org.movieos.flame.utilities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,31 +11,34 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class PrettyServiceListAdapter extends BaseAdapter {
+import org.movieos.flame.models.FlameHost;
+import org.movieos.flame.R;
+
+public class PrettyHostListAdapter extends BaseAdapter {
     static String TAG = "Flame::PrettyListAdapter";
 
-    ArrayList<FlameService> services;
+    ArrayList<FlameHost> hosts;
     Context context;
 
-    public PrettyServiceListAdapter(Context c) {
+    public PrettyHostListAdapter(Context c) {
         super();
-        services = new ArrayList<FlameService>();
+        hosts = new ArrayList<>();
         context = c;
     }
 
-    public void setServices(ArrayList<FlameService> services) {
-        this.services = services;
+    public void setHosts(ArrayList<FlameHost> hosts) {
+        this.hosts = hosts;
         this.notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return services.size();
+        return hosts.size();
     }
 
     @Override
-    public FlameService getItem(int i) {
-        return services.get(i);
+    public FlameHost getItem(int i) {
+        return hosts.get(i);
     }
 
     @Override
@@ -45,7 +48,7 @@ public class PrettyServiceListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-        FlameService service = getItem(position);
+        FlameHost host = getItem(position);
 
         View rowView;
         if (view == null) {
@@ -55,9 +58,9 @@ public class PrettyServiceListAdapter extends BaseAdapter {
             rowView = view;
         }
 
-        ((TextView)rowView.findViewById(R.id.title)).setText(service.getTitle());
-        ((TextView)rowView.findViewById(R.id.subtitle)).setText(service.getSubTitle());
-        ((ImageView)rowView.findViewById(R.id.hostImage)).setImageResource(service.getImageResource());
+        ((TextView)rowView.findViewById(R.id.title)).setText(host.getTitle());
+        ((TextView)rowView.findViewById(R.id.subtitle)).setText(host.getSubTitle());
+        ((ImageView)rowView.findViewById(R.id.hostImage)).setImageResource(host.getImageResource());
 
         return rowView;
     }

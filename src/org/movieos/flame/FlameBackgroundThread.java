@@ -10,6 +10,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.movieos.flame.models.FlameHost;
+import org.movieos.flame.models.FlameService;
+
 public class FlameBackgroundThread implements Runnable, ServiceTypeListener, ServiceListener {
     static String TAG = "Flame::FlameBackgroundTask";
 

@@ -9,12 +9,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-interface FlameListener {
-    public void updatedHosts();
-}
+import org.movieos.flame.models.FlameHost;
+import org.movieos.flame.models.FlameService;
 
 public class MyApplication extends Application {
     static String TAG = "Flame::MyApplication";
+
+    public interface FlameListener {
+        public void updatedHosts();
+    }
 
     android.net.wifi.WifiManager.MulticastLock lock;
     FlameBackgroundThread task;
