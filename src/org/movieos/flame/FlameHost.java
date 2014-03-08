@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 
 public class FlameHost {
     static String TAG = "Flame::FlameHost";
@@ -50,7 +51,7 @@ public class FlameHost {
                 int p1 = flameService.getServiceLookup() != null ? flameService.getServiceLookup().priority : -1;
                 int p2 = flameService1.getServiceLookup() != null ? flameService1.getServiceLookup().priority : -1;
                 if (p1 == p2) {
-                    return flameService.getTitle().toLowerCase().compareTo(flameService1.getTitle().toLowerCase());
+                    return flameService.getTitle().toLowerCase(Locale.getDefault()).compareTo(flameService1.getTitle().toLowerCase(Locale.getDefault()));
                 }
                 return p2 - p1;
             }
