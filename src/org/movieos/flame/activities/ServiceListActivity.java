@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import org.movieos.flame.R;
 import org.movieos.flame.models.FlameHost;
 import org.movieos.flame.utilities.ServiceListAdapter;
 
@@ -56,6 +58,8 @@ public class ServiceListActivity extends FlameActivity {
             if (hosts.size() > 0) {
                 setTitle(hosts.get(0).getTitle());
                 mAdapter.setServices(hosts.get(0).getServices());
+            } else {
+                Toast.makeText(this, R.string.host_removed, 3000);
             }
         }
     }
