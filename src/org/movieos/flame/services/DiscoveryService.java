@@ -70,8 +70,13 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
                 try {
                     String ip = Formatter.formatIpAddress(wifi.getConnectionInfo().getIpAddress());
                     InetAddress bindingAddress = InetAddress.getByName(ip);
-                    mJmDNSService = JmDNS.create(bindingAddress, "wifi");
+                    mJmDNSService = JmDNS.create(bindingAddress, "Android");
                     mJmDNSService.addServiceTypeListener(DiscoveryService.this);
+
+                    // broadcast that we are running flame
+                    ServiceInfo serviceInfo = ServiceInfo.create("_flame._tcp.local.", "Flame", 11812, mJmDNSService.getName());
+                    mJmDNSService.registerService(serviceInfo);
+
                     Log.v(TAG, "Discovery started");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -89,6 +94,7 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
             mWifiLock.release();
         }
         if (mJmDNSService != null) {
+            mJmDNSService.unregisterAllServices();
             mJmDNSService.removeServiceTypeListener(this);
         }
     }
