@@ -1,47 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
-              android:orientation="horizontal"
               android:padding="4dp"
         >
 
    <ImageView android:id="@+id/hostImage"
               android:layout_height="60dp"
               android:layout_width="60dp"
+              android:layout_alignParentTop="true"
+              android:layout_alignParentLeft="true"
               android:padding="8dp"
+              android:layout_marginRight="8dp"
               android:background="#333333"
-              android:alpha="0.3"
+              android:alpha="1"
             />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical"
-                  android:layout_marginLeft="5dp"
-            >
-
     <TextView android:id="@+id/title"
-              android:layout_height="30dp"
+              android:layout_height="wrap_content"
               android:layout_width="fill_parent"
-              android:textColor="#FFFFFF"
-              android:maxLines="1"
-              android:ellipsize="end"
-              android:text="titletitletitletitletitletitletitletitletitletitletitletitle"
-              android:gravity="bottom"
+              android:layout_alignParentTop="true"
+              android:layout_toRightOf="@id/hostImage"
+
+              android:textColor="@color/title"
+              android:text="title title title title title title title title title title title title title title title title title title"
               android:padding="2dp"
             />
 
     <TextView android:id="@+id/subtitle"
               android:layout_height="wrap_content"
               android:layout_width="fill_parent"
-              android:textColor="#777777"
-              android:ellipsize="end"
-              android:text="subtitle subtitle subtitle subtitle subtitle subtitle subtitle subtitle subtitle"
-              android:gravity="top"
+              android:layout_toRightOf="@id/hostImage"
+              android:layout_below="@id/title"
               android:padding="2dp"
+
+              android:textColor="@color/subtitle"
+              android:text="subtitle subtitle subtitle subtitle subtitle subtitle subtitle subtitle subtitle"
             />
 
-    </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

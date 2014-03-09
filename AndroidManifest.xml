@@ -7,31 +7,37 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application android:icon="@drawable/ic_launcher"
                  android:label="@string/app_name"
                  android:name="org.movieos.flame.MyApplication"
                  android:allowBackup="true"
+                 android:theme="@style/CustomTheme"
         >
 
-        <activity android:name=".activities.HostList" android:label="@string/app_name">
+        <activity android:name=".activities.AllHostsActivity" android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.HostView" android:label="Single Host">
+        <activity android:name=".activities.ServiceListActivity" android:label="Single Host">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.ServiceView" android:label="Single Service">
+        <activity android:name=".activities.ServiceDetailActivity" android:label="Single Service">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
+        <service android:name=".services.DiscoveryService" android:label="Discovery Service">
+
+        </service>
 
     </application>
 

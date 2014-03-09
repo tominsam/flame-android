@@ -2,7 +2,11 @@ package org.movieos.flame;
 
 import java.util.HashMap;
 
+import android.util.Log;
+
 public class ServiceLookup implements Comparable {
+    private static final String TAG = "SericeLookup";
+
     static HashMap<String, ServiceLookup> lookup = new HashMap<>();
 
     public static void register(String name, String description, int drawable, int priority) {
@@ -12,7 +16,8 @@ public class ServiceLookup implements Comparable {
 
     public static ServiceLookup get(String name) {
         if (lookup.isEmpty()) firstRun();
-        return lookup.get(name);
+        String key = name.split("\\.")[0].replace("_", "");
+        return lookup.get(key);
     }
 
     String name;

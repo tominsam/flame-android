@@ -17,14 +17,13 @@ task wrapper(type: Wrapper) {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+    //compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.android.support:support-v4:19.0.+'
-    compile 'com.android.support:appcompat-v7:19.0.+'
-    compile "com.google.android.gms:play-services:4.+"
-    compile 'com.github.chrisbanes.actionbarpulltorefresh:extra-abc:0.8'
+    //compile 'com.android.support:appcompat-v7:19.0.+'
+    //compile "com.google.android.gms:play-services:4.+"
+    //compile 'com.github.chrisbanes.actionbarpulltorefresh:extra-abc:0.8'
     //compile 'org.apache.commons:commons-lang3:3.+'
-    compile 'com.google.zxing:core:2.2'
-    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
+    //compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'javax.jmdns:jmdns:3.4.1'
 }
 

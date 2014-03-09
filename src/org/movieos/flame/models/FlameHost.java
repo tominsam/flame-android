@@ -1,90 +1,39 @@
 package org.movieos.flame.models;
 
+import android.net.nsd.NsdServiceInfo;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 import org.movieos.flame.R;
 import org.movieos.flame.ServiceLookup;
 
+import javax.jmdns.ServiceEvent;
+
 public class FlameHost {
     static String TAG = "Flame::FlameHost";
 
-    ArrayList<FlameService> services;
-    ArrayList<String> identifiers;
+    private List<ServiceEvent> mServices;
+    private String mIdentifer;
+    private ServiceLookup mLookup;
 
-    public FlameHost(FlameService service) {
-        identifiers = new ArrayList<>();
-        services = new ArrayList<>();
-        addService(service);
+    public static String hostIdentifierForService(ServiceEvent service) {
+        return service.getInfo().getHostAddress();
     }
 
-    public boolean matchesService(FlameService service) {
-        ArrayList<String> serviceIdentifiers = service.getHostIdentifiers();
-        for (String identifier : identifiers) {
-            if (serviceIdentifiers.contains(identifier)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public String toString() {
-        return getTitle() + " / " + getSubTitle();
-    }
-
-    public String getIdentifier() {
-        if (identifiers.isEmpty()) {
-            return "<unknown>";
-        }
-        return identifiers.get(0);
-    }
-
-    public void addService(FlameService s) {
-        identifiers.addAll(s.getHostIdentifiers());
-        services.add(s);
-
-        Collections.sort(services, new Comparator<FlameService>() {
-            @Override
-            public int compare(FlameService flameService, FlameService flameService1) {
-                int p1 = flameService.getServiceLookup() != null ? flameService.getServiceLookup().getPriority(): -1;
-                int p2 = flameService1.getServiceLookup() != null ? flameService1.getServiceLookup().getPriority() : -1;
-                if (p1 == p2) {
-                    return flameService.getTitle().toLowerCase(Locale.getDefault()).compareTo(flameService1.getTitle().toLowerCase(Locale.getDefault()));
-                }
-                return p2 - p1;
-            }
-        });
-    }
-
-    public ArrayList<FlameService> getServices() {
-        return services;
-    }
-
-    public String getTitle() {
-        return getIdentifier();
-    }
-
-    public String getSubTitle() {
-        if (services.isEmpty()) {
-            return "";
-        }
-        return services.get(0).getIPAddress();
-    }
-
-    public ServiceLookup getServiceLookup() {
+    public static ServiceLookup getServiceLookup(List<ServiceEvent> services) {
         ArrayList<ServiceLookup> lookups = new ArrayList<>();
-        for (FlameService service : getServices()) {
-            ServiceLookup lookup = service.getServiceLookup();
+        for (ServiceEvent service : services) {
+            ServiceLookup lookup = ServiceLookup.get(service.getType());
             if (lookup != null && lookup.getPriority() > 0) {
                 lookups.add(lookup);
             }
         }
-        Log.v(TAG, "lookups for " + this + " are " + lookups);
+        Log.v(TAG, "lookups for " + services + " are " + lookups);
         if (lookups.isEmpty()) {
             return null;
         }
@@ -92,12 +41,43 @@ public class FlameHost {
         return lookups.get(lookups.size()-1);
     }
 
+
+    public FlameHost(List<ServiceEvent> services) {
+        mServices = services;
+        if (services.size() > 0) {
+            mIdentifer = hostIdentifierForService(services.get(0));
+        }
+        mLookup = getServiceLookup(services);
+    }
+
+    @Override
+    public String toString() {
+        return mIdentifer;
+    }
+
+    public List<ServiceEvent> getServices() {
+        return mServices;
+    }
+
+    public String getTitle() {
+        return mServices.get(0).getName();
+    }
+
+    public String getSubTitle() {
+        if (mLookup != null) {
+            return mLookup.getDescription();
+        }
+        return mIdentifer;
+    }
+
     public int getImageResource() {
-        ServiceLookup lookup = getServiceLookup();
-        if (lookup != null) {
-            return lookup.getDrawable();
+        if (mLookup != null) {
+            return mLookup.getDrawable();
         }
         return R.drawable.macbook;
     }
 
+    public String getIdentifer() {
+        return mIdentifer;
+    }
 }

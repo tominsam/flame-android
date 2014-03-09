@@ -10,9 +10,8 @@ import android.widget.ArrayAdapter;
 import org.movieos.flame.models.FlameService;
 import org.movieos.flame.MyApplication;
 
-public class ServiceView extends Activity implements MyApplication.FlameListener {
-
-    static String TAG = "Flame::HostView";
+public class ServiceDetailActivity extends Activity {
+    static String TAG = "Flame::ServiceDetailActivity";
 
     String serviceName;
     ArrayAdapter<String> arrayAdapter;
@@ -43,8 +42,8 @@ public class ServiceView extends Activity implements MyApplication.FlameListener
         super.onStart();
         Log.v(TAG, "onStart");
         MyApplication app = (MyApplication)getApplication();
-        app.addListener(this);
-        updatedHosts();
+//        app.addListener(this);
+//        updatedHosts();
     }
 
 
@@ -61,25 +60,24 @@ public class ServiceView extends Activity implements MyApplication.FlameListener
 
     FlameService getService() {
         MyApplication app = (MyApplication)getApplication();
-        return app.getService(serviceName);
+//        return app.getService(serviceName);
+        return null;
     }
 
-    @Override
-    public void updatedHosts() {
-        FlameService service = getService();
-        if (service == null) {
-            setTitle(serviceName);
-            return;
-        }
-        setTitle(service.getTitle());
-    }
+//    @Override
+//    public void updatedHosts() {
+//        FlameService service = getService();
+//        if (service == null) {
+//            setTitle(serviceName);
+//            return;
+//        }
+//        setTitle(service.getTitle());
+//    }
 
     @Override
     protected void onStop() {
         super.onStop();
         Log.v(TAG, "onStop");
-        MyApplication app = (MyApplication)getApplication();
-        app.removeListener(this);
     }
 
     @Override

@@ -10,35 +10,36 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import org.movieos.flame.models.FlameService;
+import org.movieos.flame.models.FlameHost;
 import org.movieos.flame.R;
 
-public class PrettyServiceListAdapter extends BaseAdapter {
+public class HostListAdapter extends BaseAdapter {
     static String TAG = "Flame::PrettyListAdapter";
 
-    ArrayList<FlameService> services;
-    Context context;
+    List<FlameHost> mHosts;
+    Context mContext;
 
-    public PrettyServiceListAdapter(Context c) {
+    public HostListAdapter(Context c) {
         super();
-        services = new ArrayList<>();
-        context = c;
+        mHosts = new ArrayList<>();
+        mContext = c;
     }
 
-    public void setServices(ArrayList<FlameService> services) {
-        this.services = services;
+    public void setHosts(List<FlameHost> hosts) {
+        this.mHosts = hosts;
         this.notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return services.size();
+        return mHosts.size();
     }
 
     @Override
-    public FlameService getItem(int i) {
-        return services.get(i);
+    public FlameHost getItem(int i) {
+        return mHosts.get(i);
     }
 
     @Override
@@ -48,19 +49,19 @@ public class PrettyServiceListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-        FlameService service = getItem(position);
+        FlameHost host = getItem(position);
 
         View rowView;
         if (view == null) {
-            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+            LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             rowView = inflater.inflate(R.layout.cell_with_image, viewGroup, false);
         } else {
             rowView = view;
         }
 
-        ((TextView)rowView.findViewById(R.id.title)).setText(service.getTitle());
-        ((TextView)rowView.findViewById(R.id.subtitle)).setText(service.getSubTitle());
-        ((ImageView)rowView.findViewById(R.id.hostImage)).setImageResource(service.getImageResource());
+        ((TextView)rowView.findViewById(R.id.title)).setText(host.getTitle());
+        ((TextView)rowView.findViewById(R.id.subtitle)).setText(host.getSubTitle());
+        ((ImageView)rowView.findViewById(R.id.hostImage)).setImageResource(host.getImageResource());
 
         return rowView;
     }
