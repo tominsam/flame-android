@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">Flame</string>
     <string name="discovery_failed">Service discovery failed</string>
+    <string name="service_removed">Service no longer advertised</string>
 </resources>

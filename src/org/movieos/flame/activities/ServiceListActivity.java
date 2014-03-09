@@ -3,6 +3,7 @@ package org.movieos.flame.activities;
 import java.util.List;
 
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -53,6 +54,7 @@ public class ServiceListActivity extends FlameActivity {
         if (mAdapter != null && getDiscoveryService() != null) {
             List<FlameHost> hosts = getDiscoveryService().getHostsMatchingKey(mHostIdentifier);
             if (hosts.size() > 0) {
+                setTitle(hosts.get(0).getTitle());
                 mAdapter.setServices(hosts.get(0).getServices());
             }
         }
@@ -61,10 +63,11 @@ public class ServiceListActivity extends FlameActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        FlameHost host = (FlameHost)l.getAdapter().getItem(position);
-        ServiceEvent service = host.getServices().get(position);
+        ServiceEvent service = (ServiceEvent)l.getAdapter().getItem(position);
         Intent intent = new Intent(this, ServiceDetailActivity.class);
-        intent.putExtra("service", service);
+        List<FlameHost> hosts = getDiscoveryService().getHostsMatchingKey(mHostIdentifier);
+        intent.putExtra("hostIdentifier", hosts.get(0).getIdentifer());
+        intent.putExtra("serviceIdentifier", service.getType());
         startActivity(intent);
     }
 
