@@ -7,10 +7,11 @@
         >
 
    <ImageView android:id="@+id/hostImage"
-              android:layout_height="60dp"
-              android:layout_width="60dp"
+              android:layout_height="wrap_content"
+              android:layout_width="wrap_content"
               android:layout_alignParentTop="true"
               android:layout_alignParentLeft="true"
+              android:src="@drawable/gear2"
               android:padding="8dp"
               android:layout_marginRight="8dp"
               android:background="#333333"
