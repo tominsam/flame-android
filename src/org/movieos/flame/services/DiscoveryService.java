@@ -3,9 +3,12 @@ package org.movieos.flame.services;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import android.app.Service;
@@ -20,6 +23,7 @@ import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.util.Log;
 
+import org.movieos.flame.ServiceLookup;
 import org.movieos.flame.models.FlameHost;
 import org.movieos.flame.models.FlameService;
 
@@ -123,6 +127,14 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
             FlameHost host = new FlameHost(entry.getValue());
             hosts.add(host);
         }
+
+        Collections.sort(hosts, new Comparator<FlameHost>() {
+            @Override
+            public int compare(FlameHost lhs, FlameHost rhs) {
+                return lhs.getTitle().toLowerCase(Locale.getDefault()).compareTo(rhs.getTitle().toLowerCase(Locale.getDefault()));
+            }
+        });
+
         Log.i(TAG, "hosts is " + hosts);
         return hosts;
     }

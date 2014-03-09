@@ -44,10 +44,21 @@ public class FlameHost {
 
     public FlameHost(List<ServiceEvent> services) {
         mServices = services;
-        if (services.size() > 0) {
-            mIdentifer = hostIdentifierForService(services.get(0));
+        if (services.size() == 0) {
+            return;
         }
-        mLookup = getServiceLookup(services);
+
+        Collections.sort(services, new Comparator<ServiceEvent>() {
+            @Override
+            public int compare(ServiceEvent lhs, ServiceEvent rhs) {
+                ServiceLookup left = ServiceLookup.get(lhs.getType());
+                ServiceLookup right = ServiceLookup.get(rhs.getType());
+                return Integer.valueOf(left.getPriority()).compareTo(right.getPriority());
+            }
+        });
+
+        mIdentifer = hostIdentifierForService(services.get(0));
+        mLookup = ServiceLookup.get(services.get(0).getType());
     }
 
     @Override
@@ -64,10 +75,7 @@ public class FlameHost {
     }
 
     public String getSubTitle() {
-        if (mLookup != null) {
-            return mLookup.getDescription();
-        }
-        return mIdentifer;
+        return String.format("%s - %d services", mIdentifer, mServices.size());
     }
 
     public int getImageResource() {
