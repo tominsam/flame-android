@@ -24,7 +24,8 @@ dependencies {
     //compile 'com.github.chrisbanes.actionbarpulltorefresh:extra-abc:0.8'
     //compile 'org.apache.commons:commons-lang3:3.+'
     //compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
-    compile 'javax.jmdns:jmdns:3.4.1'
+    //compile 'javax.jmdns:jmdns:3.4.1'
+    compile 'com.github.rickyclarkson:jmdns:3.4.2-r353-1'
 }
 
 android {
