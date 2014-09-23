@@ -1,11 +1,9 @@
 package org.movieos.flame.models;
 
-import android.net.nsd.NsdServiceInfo;
-import android.util.Log;
-
 import java.util.ArrayList;
 
-import org.movieos.flame.R;
+import android.net.nsd.NsdServiceInfo;
+
 import org.movieos.flame.ServiceLookup;
 
 public class FlameService  {
@@ -87,7 +85,7 @@ public class FlameService  {
         if (serviceLookup != null) {
             return serviceLookup.getDrawable();
         }
-        return R.drawable.gear2;
+        return 0;
     }
 
 }

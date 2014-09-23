@@ -17,4 +17,11 @@ import org.movieos.flame.services.DiscoveryService;
 public class MyApplication extends Application {
     static String TAG = "Flame::MyApplication";
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+//        Intent discoveryService = new Intent(this, DiscoveryService.class);
+//        startService(discoveryService);
+    }
+
 }

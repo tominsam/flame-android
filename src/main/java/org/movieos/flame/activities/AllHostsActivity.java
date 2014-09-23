@@ -33,7 +33,7 @@ public class AllHostsActivity extends FlameActivity {
 
     @Override
     protected void discoveryDataChanged() {
-        Log.i(TAG, "updateAdapter " + mAdapter + " from " + getDiscoveryService());
+        //Log.i(TAG, "updateAdapter " + mAdapter + " from " + getDiscoveryService());
         if (mAdapter != null && getDiscoveryService() != null) {
             mAdapter.setHosts(getDiscoveryService().getHosts());
         }
@@ -44,7 +44,6 @@ public class AllHostsActivity extends FlameActivity {
         super.onListItemClick(l, v, position, id);
         FlameHost host = (FlameHost)l.getAdapter().getItem(position);
         Intent intent = new Intent(this, ServiceListActivity.class);
-        Log.v(TAG, "tapped host " + host.getTitle());
         intent.putExtra("hostIdentifier", host.getIdentifer());
         startActivity(intent);
     }

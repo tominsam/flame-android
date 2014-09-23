@@ -1,15 +1,12 @@
 package org.movieos.flame.models;
 
-import android.net.nsd.NsdServiceInfo;
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
-import org.movieos.flame.R;
+import android.util.Log;
+
 import org.movieos.flame.ServiceLookup;
 
 import javax.jmdns.ServiceEvent;
@@ -53,7 +50,14 @@ public class FlameHost {
             public int compare(ServiceEvent lhs, ServiceEvent rhs) {
                 ServiceLookup left = ServiceLookup.get(lhs.getType());
                 ServiceLookup right = ServiceLookup.get(rhs.getType());
-                return Integer.valueOf(left.getPriority()).compareTo(right.getPriority());
+                if (left != null && right != null) {
+                    return Integer.valueOf(left.getPriority()).compareTo(right.getPriority());
+                } else if (left != null && right == null) {
+                    // left wins
+                    return -1;
+                } else {
+                    return lhs.getName().compareToIgnoreCase(rhs.getName());
+                }
             }
         });
 
@@ -82,7 +86,7 @@ public class FlameHost {
         if (mLookup != null) {
             return mLookup.getDrawable();
         }
-        return R.drawable.macbook;
+        return 0;
     }
 
     public String getIdentifer() {

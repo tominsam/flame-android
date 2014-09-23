@@ -51,6 +51,13 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
 
     /// lifecycle
 
+
+//    @Override
+//    public int onStartCommand(Intent intent, int flags, int startId) {
+//        Log.v(TAG, "onStartCommand");
+//        return Service.START_NOT_STICKY;
+//    }
+
     @Override
     public void onCreate() {
         Log.v(TAG, "onCreate");
@@ -103,7 +110,7 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.v(TAG, "onBind");
+        //Log.v(TAG, "onBind");
         return mBinder;
     }
 
@@ -137,11 +144,11 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
         Collections.sort(hosts, new Comparator<FlameHost>() {
             @Override
             public int compare(FlameHost lhs, FlameHost rhs) {
-                return lhs.getTitle().toLowerCase(Locale.getDefault()).compareTo(rhs.getTitle().toLowerCase(Locale.getDefault()));
+                return lhs.getTitle().compareToIgnoreCase(rhs.getTitle());
             }
         });
 
-        Log.i(TAG, "hosts is " + hosts);
+        //Log.i(TAG, "hosts is " + hosts);
         return hosts;
     }
 
@@ -167,18 +174,18 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
 
     @Override
     public void serviceTypeAdded(ServiceEvent event) {
-        Log.v(TAG, "new type: " + event.getType());
+        //Log.v(TAG, "new type: " + event.getType());
         event.getDNS().addServiceListener(event.getType(), this);
     }
 
     @Override
     public void subTypeForServiceTypeAdded(ServiceEvent event) {
-        Log.v(TAG, "subTypeForServiceTypeAdded " + event);
+        //Log.v(TAG, "subTypeForServiceTypeAdded " + event);
     }
 
     @Override
     public void serviceAdded(ServiceEvent event) {
-        Log.v(TAG, "serviceAdded: " + event.getName() + " / " + event.getType());
+        //Log.v(TAG, "serviceAdded: " + event.getName() + " / " + event.getType());
         event.getDNS().requestServiceInfo(event.getType(), event.getName(), true);
     }
 
@@ -199,7 +206,7 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
 
     @Override
     public void serviceResolved(final ServiceEvent event) {
-        Log.v(TAG, "serviceRemoved: "+event.getName() + " on " + event.getType());
+        Log.v(TAG, "serviceResolved: "+event.getName() + " / " + event.getType());
         mHandler.post(new Runnable() {
             @Override
             public void run() {

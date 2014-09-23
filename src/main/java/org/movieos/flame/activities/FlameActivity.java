@@ -40,13 +40,21 @@ public abstract class FlameActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.v(TAG, getClass().toString() + " onCreate");
+
+        Intent intent = new Intent(this, DiscoveryService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Log.v(TAG, getClass().toString() + " onStart");
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.v(TAG, getClass().toString() + " onResume");
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
         mBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -56,8 +64,8 @@ public abstract class FlameActivity extends ListActivity {
         };
         broadcastManager.registerReceiver(mBroadcastReceiver, new IntentFilter(DiscoveryService.BROADCAST_HOSTS_CHANGED));
 
-        Intent intent = new Intent(this, DiscoveryService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        // redisplay in case things changed while we weren't visible
+        discoveryDataChanged();
     }
 
     abstract protected void discoveryDataChanged();
@@ -80,14 +88,20 @@ public abstract class FlameActivity extends ListActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        Log.v(TAG, getClass().toString() + " onStop");
-        unbindService(mConnection);
+    protected void onPause() {
+        super.onPause();
+        Log.v(TAG, getClass().toString() + " onPause");
         if (mBroadcastReceiver != null) {
             LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
             broadcastManager.unregisterReceiver(mBroadcastReceiver);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onStop();
+        Log.v(TAG, getClass().toString() + " onDestroy");
+        unbindService(mConnection);
     }
 
     @Override
