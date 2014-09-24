@@ -4,7 +4,6 @@ gen/
 bin/
 target/
 /.idea/
-
 /build/
-
 /flame-android.iml
+release.properties
