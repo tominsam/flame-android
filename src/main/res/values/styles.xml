@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- the theme applied to the application or activity -->
+    <style name="CustomTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="actionBarStyle">@style/CustomActionBar</item>
+        <item name="colorPrimary">#FFAA0000</item>
+        <item name="colorPrimaryDark">#FF660000</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="CustomActionBar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:background">?colorPrimary</item>
+    </style>
+
+</resources>

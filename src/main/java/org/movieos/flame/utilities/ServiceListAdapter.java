@@ -1,72 +1,66 @@
 package org.movieos.flame.utilities;
 
-import android.app.Activity;
-import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.movieos.flame.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.movieos.flame.models.FlameService;
-import org.movieos.flame.R;
-
 import javax.jmdns.ServiceEvent;
 
-public class ServiceListAdapter extends BaseAdapter {
+public class ServiceListAdapter extends RecyclerView.Adapter {
     static String TAG = "Flame::ServiceListAdapter";
 
-    List<ServiceEvent> mServices;
-    Context mContext;
+    final List<ServiceEvent> mServices = new ArrayList<>();
 
-    public ServiceListAdapter(Context c) {
+    public ServiceListAdapter() {
         super();
-        mServices = new ArrayList<>();
-        mContext = c;
     }
 
     public void setServices(List<ServiceEvent> services) {
-        this.mServices = services;
-        this.notifyDataSetChanged();
+        mServices.clear();
+        mServices.addAll(services);
+        notifyDataSetChanged();
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return mServices.size();
     }
 
     @Override
-    public ServiceEvent getItem(int i) {
-        return mServices.get(i);
+    public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.cell_with_image, parent, false);
+        return new RecyclerView.ViewHolder(view) {};
     }
 
     @Override
-    public long getItemId(int i) {
-        return i;
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        final ServiceEvent service = mServices.get(position);
+
+        ((TextView)holder.itemView.findViewById(android.R.id.text1)).setText(service.getName());
+        ((TextView)holder.itemView.findViewById(android.R.id.text2)).setText(service.getType());
+        //((ImageView)holder.itemView.findViewById(android.R.id.icon)).setImageResource(service.getImageResource());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                activity.getSupportFragmentManager()
+                    .beginTransaction()
+//                    .replace(R.id.main, ServiceListFragment.make(host))
+                    .commit();
+            }
+        });
     }
 
-    @Override
-    public View getView(int position, View view, ViewGroup viewGroup) {
-        ServiceEvent service = getItem(position);
-
-        View rowView;
-        if (view == null) {
-            LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
-            rowView = inflater.inflate(R.layout.cell_with_image, viewGroup, false);
-        } else {
-            rowView = view;
-        }
-
-        ((TextView)rowView.findViewById(R.id.title)).setText(service.getName());
-        ((TextView)rowView.findViewById(R.id.subtitle)).setText(service.getType());
-        //((ImageView)rowView.findViewById(R.id.hostImage)).setImageResource(service.getImageResource());
-
-        return rowView;
-    }
 }
 
 

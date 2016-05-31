@@ -7,3 +7,4 @@ target/
 /build/
 /flame-android.iml
 release.properties
+.gradle

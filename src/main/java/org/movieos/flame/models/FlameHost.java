@@ -1,19 +1,17 @@
 package org.movieos.flame.models;
 
+import org.movieos.flame.ServiceLookup;
+import timber.log.Timber;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import android.util.Log;
-
-import org.movieos.flame.ServiceLookup;
+import java.util.Locale;
 
 import javax.jmdns.ServiceEvent;
 
 public class FlameHost {
-    static String TAG = "Flame::FlameHost";
-
     private List<ServiceEvent> mServices;
     private String mIdentifer;
     private ServiceLookup mLookup;
@@ -30,7 +28,7 @@ public class FlameHost {
                 lookups.add(lookup);
             }
         }
-        Log.v(TAG, "lookups for " + services + " are " + lookups);
+        Timber.v("lookups for " + services + " are " + lookups);
         if (lookups.isEmpty()) {
             return null;
         }
@@ -79,7 +77,7 @@ public class FlameHost {
     }
 
     public String getSubTitle() {
-        return String.format("%s - %d services", mIdentifer, mServices.size());
+        return String.format(Locale.getDefault(), "%s - %d services", mIdentifer, mServices.size());
     }
 
     public int getImageResource() {

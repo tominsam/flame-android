@@ -1,16 +1,5 @@
 package org.movieos.flame.services;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 import android.app.Service;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
@@ -18,14 +7,20 @@ import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.text.format.Formatter;
-import android.util.Log;
 
-import org.movieos.flame.ServiceLookup;
 import org.movieos.flame.models.FlameHost;
-import org.movieos.flame.models.FlameService;
+import timber.log.Timber;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;
@@ -34,14 +29,17 @@ import javax.jmdns.ServiceListener;
 import javax.jmdns.ServiceTypeListener;
 
 public class DiscoveryService extends Service implements ServiceTypeListener, ServiceListener {
-    private static final String TAG = "DiscoveryService";
 
-    public static final String BROADCAST_HOSTS_CHANGED = "broadcast_hosts_changed";
+    private static HashMap<String, ServiceEvent> sServices;
+    private static List<DiscoveryServiceListener> sListeners = new ArrayList<>();
 
     private JmDNS mJmDNSService;
-    private static HashMap<String, ServiceEvent> services;
     private WifiManager.MulticastLock mWifiLock;
     private Handler mHandler;
+
+    public interface DiscoveryServiceListener {
+        void onDiscoveredServicesChanged();
+    }
 
     public class MyBinder extends Binder {
         public DiscoveryService getService() {
@@ -51,18 +49,11 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
 
     /// lifecycle
 
-
-//    @Override
-//    public int onStartCommand(Intent intent, int flags, int startId) {
-//        Log.v(TAG, "onStartCommand");
-//        return Service.START_NOT_STICKY;
-//    }
-
     @Override
     public void onCreate() {
-        Log.v(TAG, "onCreate");
+        Timber.v("onCreate");
 
-        services = new HashMap<>();
+        sServices = new HashMap<>();
 
         final WifiManager wifi = (android.net.wifi.WifiManager)getSystemService(android.content.Context.WIFI_SERVICE);
         mWifiLock = wifi.createMulticastLock("Flame");
@@ -84,7 +75,7 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
                     ServiceInfo serviceInfo = ServiceInfo.create("_flame._tcp.local.", "Flame", 11812, mJmDNSService.getName());
                     mJmDNSService.registerService(serviceInfo);
 
-                    Log.v(TAG, "Discovery started");
+                    Timber.v("Discovery started");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -92,11 +83,12 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
             }
         }.execute();
 
+        broadcastHostChange();
     }
 
     @Override
     public void onDestroy() {
-        Log.v(TAG, "onDestroy");
+        Timber.v("onDestroy");
         if (mWifiLock != null) {
             mWifiLock.release();
         }
@@ -110,7 +102,6 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
 
     @Override
     public IBinder onBind(Intent intent) {
-        //Log.v(TAG, "onBind");
         return mBinder;
     }
 
@@ -122,7 +113,7 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
 
     public List<FlameHost> getHostsMatchingKey(String filter) {
         Map<String, List<ServiceEvent>> grouped = new HashMap<>();
-        for (ServiceEvent service : services.values()) {
+        for (ServiceEvent service : sServices.values()) {
             String key = FlameHost.hostIdentifierForService(service);
             if (filter != null && !TextUtils.equals(filter, key)) {
                 continue;
@@ -134,9 +125,7 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
         }
 
         List<FlameHost> hosts = new ArrayList<>();
-        Iterator<Map.Entry<String, List<ServiceEvent>>> iterator = grouped.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, List<ServiceEvent>> entry = iterator.next();
+        for (final Map.Entry<String, List<ServiceEvent>> entry : grouped.entrySet()) {
             FlameHost host = new FlameHost(entry.getValue());
             hosts.add(host);
         }
@@ -148,22 +137,15 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
             }
         });
 
-        //Log.i(TAG, "hosts is " + hosts);
         return hosts;
     }
-
-//    public List<FlameService> getServices() {
-//        List<FlameService> services = new ArrayList<>();
-//
-//        return services;
-//    }
-
 
     /// actions
 
     private void broadcastHostChange() {
-        Intent updated = new Intent(BROADCAST_HOSTS_CHANGED);
-        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(updated);
+        for (DiscoveryServiceListener listener : sListeners) {
+            listener.onDiscoveredServicesChanged();
+        }
     }
 
     private String uniqueIdentifierForService(ServiceEvent service) {
@@ -174,30 +156,30 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
 
     @Override
     public void serviceTypeAdded(ServiceEvent event) {
-        //Log.v(TAG, "new type: " + event.getType());
+        //Timber.v("new type: " + event.getType());
         event.getDNS().addServiceListener(event.getType(), this);
     }
 
     @Override
     public void subTypeForServiceTypeAdded(ServiceEvent event) {
-        //Log.v(TAG, "subTypeForServiceTypeAdded " + event);
+        //Timber.v("subTypeForServiceTypeAdded " + event);
     }
 
     @Override
     public void serviceAdded(ServiceEvent event) {
-        //Log.v(TAG, "serviceAdded: " + event.getName() + " / " + event.getType());
+        //Timber.v("serviceAdded: " + event.getName() + " / " + event.getType());
         event.getDNS().requestServiceInfo(event.getType(), event.getName(), true);
     }
 
     @Override
     public void serviceRemoved(ServiceEvent event) {
-        Log.v(TAG, "serviceRemoved: " + event.getName() + " / " + event.getType());
+        Timber.v("serviceRemoved: %s / %s", event.getName(), event.getType());
         final String key = uniqueIdentifierForService(event);
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (services.containsKey(key)) {
-                    services.remove(key);
+                if (sServices.containsKey(key)) {
+                    sServices.remove(key);
                     broadcastHostChange();
                 }
             }
@@ -206,15 +188,22 @@ public class DiscoveryService extends Service implements ServiceTypeListener, Se
 
     @Override
     public void serviceResolved(final ServiceEvent event) {
-        Log.v(TAG, "serviceResolved: "+event.getName() + " / " + event.getType());
+        Timber.v("serviceResolved: %s / %s", event.getName(), event.getType());
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                services.put(uniqueIdentifierForService(event), event);
+                sServices.put(uniqueIdentifierForService(event), event);
                 broadcastHostChange();
             }
         });
     }
 
+    public static void registerListener(DiscoveryServiceListener listener) {
+        sListeners.add(listener);
+    }
+
+    public static void unregisterListener(DiscoveryServiceListener listener) {
+        sListeners.remove(listener);
+    }
 
 }

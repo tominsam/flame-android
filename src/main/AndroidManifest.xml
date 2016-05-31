@@ -1,42 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.movieos.flame"
-          android:versionName="1.0"
+<manifest package="org.movieos.flame"
+          xmlns:android="http://schemas.android.com/apk/res/android"
           android:versionCode="1"
+          android:versionName="1.0"
     >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-    <application android:icon="@drawable/ic_launcher"
-                 android:label="@string/app_name"
-                 android:name="org.movieos.flame.MyApplication"
-                 android:allowBackup="true"
-                 android:theme="@style/CustomTheme"
+    <application
+        android:name="org.movieos.flame.MyApplication"
+        android:allowBackup="false"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/CustomTheme"
         >
 
-        <activity android:name=".activities.AllHostsActivity" android:label="@string/app_name">
+        <activity
+            android:name=".activities.FlameActivity"
+            android:label="@string/app_name"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.ServiceListActivity" android:label="Single Host">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".activities.ServiceDetailActivity" android:label="Single Service">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-        </activity>
-
-        <service android:name=".services.DiscoveryService" android:label="Discovery Service">
-
+        <service
+            android:name=".services.DiscoveryService"
+            android:label="Discovery Service"
+            >
         </service>
 
     </application>
