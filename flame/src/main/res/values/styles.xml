@@ -5,6 +5,7 @@
         <item name="actionBarStyle">@style/CustomActionBar</item>
         <item name="colorPrimary">#FFAA0000</item>
         <item name="colorPrimaryDark">#FF660000</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
     <!-- ActionBar styles -->

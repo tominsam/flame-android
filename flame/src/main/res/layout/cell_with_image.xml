@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:selectableItemBackground"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        >
+
+        <ImageView
+            android:id="@android:id/icon"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_launcher"
+            android:tint="#DDDDDD"
+            />
+
+        <TextView
+            android:id="@android:id/text1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="72dp"
+
+            android:textColor="@color/title"
+            tools:text="title title title title title title title title title title title title title title title title title title"
+            />
+
+        <TextView
+            android:id="@android:id/text2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@android:id/text1"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="72dp"
+
+            android:textColor="@color/subtitle"
+            tools:text="subtitle subtitle subtitle subtitle subtitle subtitle subtitle subtitle subtitle"
+            />
+
+    </RelativeLayout>
+</layout>

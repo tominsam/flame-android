@@ -4,7 +4,8 @@ gen/
 bin/
 target/
 /.idea/
-/build/
-/flame-android.iml
+**/build/
+**/*.iml
 release.properties
 .gradle
+**/.DS_Store

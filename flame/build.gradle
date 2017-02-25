@@ -1,0 +1,60 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 25
+
+        jackOptions {
+            enabled true
+        }
+    }
+
+    productFlavors {
+    }
+
+    signingConfigs {
+        release
+    }
+
+    buildTypes {
+        debug {
+            setApplicationIdSuffix('debug')
+        }
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:25.2.0'
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'javax.jmdns:jmdns:3.4.1'
+    compile 'com.android.support:recyclerview-v7:25.2.0'
+    compile 'com.jakewharton.timber:timber:4.1.2'
+    compile 'com.android.support:design:25.2.0'
+}
+
+// load signing information based on gradle.properties
+// http://www.thoughtworks.com/insights/blog/signing-open-source-android-apps-without-disclosing-passwords
+//def props = new Properties()
+//props.load(new FileInputStream(rootProject.file("release.properties")))
+//android.signingConfigs.release.keyAlias = props.keyAlias
+//android.signingConfigs.release.storeFile = file(props.keyStore)
+//android.signingConfigs.release.storePassword = props.keyStorePassword
+//android.signingConfigs.release.keyPassword = props.keyAliasPassword
+
+

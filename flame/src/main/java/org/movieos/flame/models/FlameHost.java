@@ -5,14 +5,13 @@ import timber.log.Timber;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
 import javax.jmdns.ServiceEvent;
 
 public class FlameHost {
-    private List<ServiceEvent> mServices;
+    private final List<ServiceEvent> mServices = new ArrayList<>();
     private String mIdentifer;
     private ServiceLookup mLookup;
 
@@ -28,7 +27,7 @@ public class FlameHost {
                 lookups.add(lookup);
             }
         }
-        Timber.v("lookups for " + services + " are " + lookups);
+        Timber.v("lookups for %s are %s",services, lookups);
         if (lookups.isEmpty()) {
             return null;
         }
@@ -38,24 +37,22 @@ public class FlameHost {
 
 
     public FlameHost(List<ServiceEvent> services) {
-        mServices = services;
+        mServices.clear();
+        mServices.addAll(services);
         if (services.size() == 0) {
             return;
         }
 
-        Collections.sort(services, new Comparator<ServiceEvent>() {
-            @Override
-            public int compare(ServiceEvent lhs, ServiceEvent rhs) {
-                ServiceLookup left = ServiceLookup.get(lhs.getType());
-                ServiceLookup right = ServiceLookup.get(rhs.getType());
-                if (left != null && right != null) {
-                    return Integer.valueOf(left.getPriority()).compareTo(right.getPriority());
-                } else if (left != null && right == null) {
-                    // left wins
-                    return -1;
-                } else {
-                    return lhs.getName().compareToIgnoreCase(rhs.getName());
-                }
+        Collections.sort(services, (lhs, rhs) -> {
+            ServiceLookup left = ServiceLookup.get(lhs.getType());
+            ServiceLookup right = ServiceLookup.get(rhs.getType());
+            if (left != null && right != null) {
+                return Integer.valueOf(left.getPriority()).compareTo(right.getPriority());
+            } else if (left != null) {
+                // left wins
+                return -1;
+            } else {
+                return lhs.getName().compareToIgnoreCase(rhs.getName());
             }
         });
 

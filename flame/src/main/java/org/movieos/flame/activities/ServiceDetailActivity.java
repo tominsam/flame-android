@@ -2,10 +2,10 @@ package org.movieos.flame.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import org.movieos.flame.R;
+import timber.log.Timber;
 
 public class ServiceDetailActivity extends FlameActivity {
     static String TAG = "Flame::ServiceDetailActivity";
@@ -17,7 +17,7 @@ public class ServiceDetailActivity extends FlameActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v(TAG, "started!");
+        Timber.v("started!");
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -28,7 +28,7 @@ public class ServiceDetailActivity extends FlameActivity {
         mHostIdentifier = intent.getExtras().getString("hostIdentifier");
         mServiceIdentifier = intent.getExtras().getString("serviceIdentifier");
         if (mHostIdentifier == null || mServiceIdentifier == null) {
-            Log.e(TAG, "no identifier in bundle");
+            Timber.e("no identifier in bundle");
             finish();
             return;
         }

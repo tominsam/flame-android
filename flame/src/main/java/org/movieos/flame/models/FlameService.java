@@ -1,14 +1,12 @@
 package org.movieos.flame.models;
 
-import java.util.ArrayList;
-
 import android.net.nsd.NsdServiceInfo;
 
 import org.movieos.flame.ServiceLookup;
 
-public class FlameService  {
-    static String TAG = "Flame::FlameService";
+import java.util.ArrayList;
 
+public class FlameService  {
     NsdServiceInfo service;
     ArrayList<String> hostIdentifiers;
     ServiceLookup serviceLookup;
