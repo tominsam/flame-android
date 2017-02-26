@@ -1,16 +1,13 @@
-package org.movieos.flame.fragments;
+package org.movieos.flame.utilities;
 
+import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 
-import org.movieos.flame.activities.FlameActivity;
+import org.greenrobot.eventbus.EventBus;
 import org.movieos.flame.models.FlameHost;
 import timber.log.Timber;
 
@@ -28,35 +25,27 @@ import javax.jmdns.ServiceInfo;
 import javax.jmdns.ServiceListener;
 import javax.jmdns.ServiceTypeListener;
 
-public class DiscoveryFragment extends Fragment implements ServiceTypeListener, ServiceListener {
+public class DiscoveryService implements ServiceTypeListener, ServiceListener {
 
     private static final String FLAME_SERVICE_NAME = "_flame._tcp.local.";
     private static final int FLAME_SERVICE_PORT = 11812;
 
     private HashMap<String, ServiceEvent> mServices;
 
+    private Context mContext;
     private JmDNS mJmDNSService;
     private WifiManager.MulticastLock mWifiLock;
-    private Handler mHandler;
 
-    public DiscoveryFragment() {
+    public DiscoveryService(Context context) {
         super();
-        setRetainInstance(true);
-    }
-
-    @Override
-    public void onCreate(@Nullable final Bundle savedInstanceState) {
-        Timber.v("onCreate");
-        super.onCreate(savedInstanceState);
+        mContext = context.getApplicationContext();
 
         mServices = new HashMap<>();
 
-        final WifiManager wifi = (android.net.wifi.WifiManager)getContext().getApplicationContext().getSystemService(android.content.Context.WIFI_SERVICE);
+        final WifiManager wifi = (android.net.wifi.WifiManager)mContext.getApplicationContext().getSystemService(android.content.Context.WIFI_SERVICE);
         mWifiLock = wifi.createMulticastLock("Flame");
         mWifiLock.setReferenceCounted(true);
         mWifiLock.acquire();
-
-        mHandler = new Handler();
 
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -65,7 +54,7 @@ public class DiscoveryFragment extends Fragment implements ServiceTypeListener, 
                     String ip = Formatter.formatIpAddress(wifi.getConnectionInfo().getIpAddress());
                     InetAddress bindingAddress = InetAddress.getByName(ip);
                     mJmDNSService = JmDNS.create(bindingAddress, "Android");
-                    mJmDNSService.addServiceTypeListener(DiscoveryFragment.this);
+                    mJmDNSService.addServiceTypeListener(DiscoveryService.this);
 
                     // broadcast that we are running flame
                     ServiceInfo serviceInfo = ServiceInfo.create(FLAME_SERVICE_NAME, "Flame", FLAME_SERVICE_PORT, mJmDNSService.getName());
@@ -79,12 +68,10 @@ public class DiscoveryFragment extends Fragment implements ServiceTypeListener, 
             }
         }.execute();
 
-        broadcastHostChange();
+        EventBus.getDefault().post(new HostsChangedNotification());
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void stop() {
         Timber.v("onDestroy");
         if (mWifiLock != null) {
             mWifiLock.release();
@@ -127,12 +114,6 @@ public class DiscoveryFragment extends Fragment implements ServiceTypeListener, 
 
     /// actions
 
-    private void broadcastHostChange() {
-        if (getActivity() != null) {
-            ((FlameActivity) getActivity()).onDiscoveredServicesChanged();
-        }
-    }
-
     private String uniqueIdentifierForService(ServiceEvent service) {
         return String.format("%s %s", service.getName(), service.getType());
     }
@@ -160,21 +141,21 @@ public class DiscoveryFragment extends Fragment implements ServiceTypeListener, 
     public void serviceRemoved(ServiceEvent event) {
         Timber.v("serviceRemoved: %s / %s", event.getName(), event.getType());
         final String key = uniqueIdentifierForService(event);
-        mHandler.post(() -> {
-            if (mServices.containsKey(key)) {
-                mServices.remove(key);
-                broadcastHostChange();
-            }
-        });
+        if (mServices.containsKey(key)) {
+            mServices.remove(key);
+            EventBus.getDefault().post(new HostsChangedNotification());
+        }
     }
 
     @Override
     public void serviceResolved(final ServiceEvent event) {
         Timber.v("serviceResolved: %s / %s", event.getName(), event.getType());
-        mHandler.post(() -> {
-            mServices.put(uniqueIdentifierForService(event), event);
-            broadcastHostChange();
-        });
+        mServices.put(uniqueIdentifierForService(event), event);
+        EventBus.getDefault().post(new HostsChangedNotification());
+    }
+
+    public static class HostsChangedNotification {
+
     }
 
 }

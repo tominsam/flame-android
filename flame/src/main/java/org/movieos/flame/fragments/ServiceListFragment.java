@@ -6,18 +6,22 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.movieos.flame.MyApplication;
 import org.movieos.flame.R;
-import org.movieos.flame.activities.FlameActivity;
 import org.movieos.flame.databinding.CellWithImageBinding;
 import org.movieos.flame.databinding.RecyclerViewFragmentBinding;
 import org.movieos.flame.models.FlameHost;
 import org.movieos.flame.utilities.BindingViewHolder;
+import org.movieos.flame.utilities.DiscoveryService;
 import timber.log.Timber;
 
 import java.util.ArrayList;
@@ -25,7 +29,7 @@ import java.util.List;
 
 import javax.jmdns.ServiceEvent;
 
-public class ServiceListFragment extends Fragment implements FlameActivity.DiscoveredServicesChanged {
+public class ServiceListFragment extends Fragment {
 
     private static final String HOST_IDENTIFIER = "hostIdentifier";
 
@@ -60,13 +64,17 @@ public class ServiceListFragment extends Fragment implements FlameActivity.Disco
         }
 
         mBinding.toolbar.setTitle(mHostIdentifier);
-        Drawable bsck = ContextCompat.getDrawable(getContext(), R.drawable.ic_arrow_back_black_24dp);
-        bsck.setTint(0xffffffff);
-        mBinding.toolbar.setNavigationIcon(bsck);
+        Drawable back = ContextCompat.getDrawable(getContext(), R.drawable.ic_arrow_back_black_24dp);
+        back.setTint(0xFFFFFFFF);
+        mBinding.toolbar.setNavigationIcon(back);
         mBinding.toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
 
         mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mBinding.recyclerView.setAdapter(mAdapter);
+
+        DividerItemDecoration divider = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
+        divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.divider));
+        mBinding.recyclerView.addItemDecoration(divider);
 
         return mBinding.getRoot();
     }
@@ -83,22 +91,15 @@ public class ServiceListFragment extends Fragment implements FlameActivity.Disco
     @Override
     public void onResume() {
         super.onResume();
-        onDiscoveredServicesChanged();
+        onMessageEvent(null);
     }
 
-    @Override
-    public void onDiscoveredServicesChanged() {
-        if (getDiscovery() == null) {
-            return;
-        }
-        List<FlameHost> hosts = getDiscovery().getHostsMatchingKey(mHostIdentifier);
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(DiscoveryService.HostsChangedNotification event) {
+        List<FlameHost> hosts = MyApplication.discoveryService().getHostsMatchingKey(mHostIdentifier);
         if (!hosts.isEmpty()) {
             mAdapter.setServices(hosts.get(0).getServices());
         }
-    }
-
-    DiscoveryFragment getDiscovery() {
-        return ((FlameActivity)getActivity()).getDiscovery();
     }
 
     private static class ServiceListAdapter extends RecyclerView.Adapter<BindingViewHolder<CellWithImageBinding>> {

@@ -1,6 +1,6 @@
 package org.movieos.flame.models;
 
-import org.movieos.flame.ServiceLookup;
+import org.movieos.flame.utilities.ServiceLookup;
 import timber.log.Timber;
 
 import java.util.ArrayList;

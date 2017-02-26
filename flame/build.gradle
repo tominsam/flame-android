@@ -46,6 +46,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.2.0'
     compile 'com.jakewharton.timber:timber:4.1.2'
     compile 'com.android.support:design:25.2.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
 }
 
 // load signing information based on gradle.properties

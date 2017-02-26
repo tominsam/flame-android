@@ -1,37 +1,38 @@
-package org.movieos.flame;
+package org.movieos.flame.utilities;
+
+import android.support.annotation.NonNull;
 
 import java.util.HashMap;
 
 public class ServiceLookup implements Comparable {
-    private static final String TAG = "SericeLookup";
 
-    static HashMap<String, ServiceLookup> lookup = new HashMap<>();
+    private static HashMap<String, ServiceLookup> sLookup = new HashMap<>();
 
-    public static void register(String name, String description, int drawable, int priority) {
+    private static void register(String name, String description, int drawable, int priority) {
         ServiceLookup s = new ServiceLookup(name, description, drawable, priority);
-        lookup.put(s.name, s);
+        sLookup.put(s.mName, s);
     }
 
     public static ServiceLookup get(String name) {
-        if (lookup.isEmpty()) firstRun();
+        if (sLookup.isEmpty()) firstRun();
         String key = name.split("\\.")[0].replace("_", "");
-        return lookup.get(key);
+        return sLookup.get(key);
     }
 
-    String name;
-    String description;
-    int drawable;
-    int priority;
+    private String mName;
+    private String mDescription;
+    private int mDrawable;
+    private int mPriority;
 
-    public ServiceLookup(String name, String description, int drawable, int priority) {
+    private ServiceLookup(String name, String description, int drawable, int priority) {
         super();
-        this.name = name;
-        this.description = description;
-        this.drawable = drawable;
-        this.priority = priority;
+        this.mName = name;
+        this.mDescription = description;
+        this.mDrawable = drawable;
+        this.mPriority = priority;
     }
 
-    static void firstRun() {
+    private static void firstRun() {
         // custom things not in master list
         register("acp-sync", "Internet gateway device configuration protocol", 0, 0);
         register("appletv-v2", "Apple TV", 0, 5);
@@ -617,25 +618,24 @@ public class ServiceLookup implements Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(@NonNull Object o) {
         if (o instanceof ServiceLookup) {
             ServiceLookup s = (ServiceLookup) o;
-            return Integer.valueOf(priority).compareTo(s.priority);
+            return Integer.valueOf(mPriority).compareTo(s.mPriority);
         }
         return 0;
     }
 
-
     public String getDescription() {
-        return description;
+        return mDescription;
     }
 
     public int getDrawable() {
-        return drawable;
+        return mDrawable;
     }
 
     public int getPriority() {
-        return priority;
+        return mPriority;
     }
 }
 

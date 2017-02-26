@@ -13,4 +13,14 @@
         <item name="android:background">?colorPrimary</item>
     </style>
 
+    <style name="Text.Title" parent="@android:style/TextAppearance">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/title</item>
+    </style>
+
+    <style name="Text.Subtitle" parent="@android:style/TextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/subtitle</item>
+    </style>
+
 </resources>

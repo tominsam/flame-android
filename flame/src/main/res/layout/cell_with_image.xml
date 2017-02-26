@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     >
 
@@ -8,44 +9,32 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:foreground="?android:selectableItemBackground"
-        android:paddingBottom="8dp"
         android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         >
 
-        <ImageView
-            android:id="@android:id/icon"
-            android:layout_width="72dp"
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:scaleType="center"
-            android:src="@drawable/ic_launcher"
-            android:tint="#DDDDDD"
+            android:layout_alignParentEnd="true"
+            android:textAppearance="@style/Text.Title"
+            tools:text="Service title"
             />
 
         <TextView
-            android:id="@android:id/text1"
-            android:layout_width="fill_parent"
+            android:id="@+id/text2"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/text1"
+            android:layout_marginTop="2dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="72dp"
-
-            android:textColor="@color/title"
-            tools:text="title title title title title title title title title title title title title title title title title title"
-            />
-
-        <TextView
-            android:id="@android:id/text2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@android:id/text1"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="72dp"
-
-            android:textColor="@color/subtitle"
-            tools:text="subtitle subtitle subtitle subtitle subtitle subtitle subtitle subtitle subtitle"
+            android:textAppearance="@style/Text.Subtitle"
+            tools:text="Service subtitle"
             />
 
     </RelativeLayout>

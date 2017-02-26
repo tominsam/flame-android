@@ -2,21 +2,22 @@ package org.movieos.flame.models;
 
 import android.net.nsd.NsdServiceInfo;
 
-import org.movieos.flame.ServiceLookup;
+import org.movieos.flame.utilities.ServiceLookup;
 
 import java.util.ArrayList;
 
-public class FlameService  {
-    NsdServiceInfo service;
-    ArrayList<String> hostIdentifiers;
-    ServiceLookup serviceLookup;
+public class FlameService {
+
+    NsdServiceInfo mService;
+    ArrayList<String> mHostIdentifiers;
+    ServiceLookup mServiceLookup;
 
     public FlameService(NsdServiceInfo s) {
         if (s == null) {
             throw new RuntimeException("service must be set");
         }
-        service = s;
-        hostIdentifiers = new ArrayList<>();
+        mService = s;
+        mHostIdentifiers = new ArrayList<>();
 //        if (service.getInfo() != null) {
 //            if (!service.getInfo().getServer().isEmpty()) {
 //                hostIdentifiers.add(service.getInfo().getServer());
@@ -33,11 +34,7 @@ public class FlameService  {
     }
 
     public ArrayList<String> getHostIdentifiers() {
-        return hostIdentifiers;
-    }
-
-    public String toString() {
-        return String.format("%s %s", service.getServiceName(), service.getServiceType());
+        return mHostIdentifiers;
     }
 
     @Override
@@ -48,21 +45,25 @@ public class FlameService  {
         return ((FlameService) o).toString().equals(toString());
     }
 
+    public String toString() {
+        return String.format("%s %s", mService.getServiceName(), mService.getServiceType());
+    }
+
     public NsdServiceInfo getInfo() {
-        return service;
+        return mService;
     }
 
     public String getIPAddress() {
-        return service.getHost().getHostAddress();
+        return mService.getHost().getHostAddress();
     }
 
     public ServiceLookup getServiceLookup() {
-        return serviceLookup;
+        return mServiceLookup;
     }
 
     public String getIdentifier() {
         // TODO probably not good enough
-        return String.format("%s %s", service.getServiceName(), service.getServiceType());
+        return String.format("%s %s", mService.getServiceName(), mService.getServiceType());
     }
 
     public String getTitle() {
@@ -80,8 +81,8 @@ public class FlameService  {
     }
 
     public int getImageResource() {
-        if (serviceLookup != null) {
-            return serviceLookup.getDrawable();
+        if (mServiceLookup != null) {
+            return mServiceLookup.getDrawable();
         }
         return 0;
     }
