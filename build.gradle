@@ -1,20 +1,25 @@
-subprojects {
+buildscript {
+    ext.kotlin_version = '1.1.2-2'
+    ext.android_plugin_version = '3.0.0-alpha1'
+    //ext.support_version = '25.3.1'
+    ext.support_version = '26.0.0-alpha1'
 
     repositories {
-        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:$android_plugin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 
-    buildscript {
-        repositories {
-            jcenter()
-        }
-        dependencies {
-            classpath 'com.android.tools.build:gradle:2.3.0-rc1'
-        }
-    }
 }
 
-repositories {
-    jcenter()
+allprojects {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://maven.google.com'
+        }
+    }
 }
 

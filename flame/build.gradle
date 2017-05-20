@@ -1,13 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 
     dataBinding {
         enabled = true
@@ -16,10 +12,6 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 25
-
-        jackOptions {
-            enabled true
-        }
     }
 
     productFlavors {
@@ -40,13 +32,22 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:25.2.0'
-    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile "com.android.support:support-v4:$support_version"
+    compile "com.android.support:appcompat-v7:$support_version"
+    compile "com.android.support:recyclerview-v7:$support_version"
+    compile "com.android.support:design:$support_version"
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    kapt "com.android.databinding:compiler:$android_plugin_version"
+
     compile 'javax.jmdns:jmdns:3.4.1'
-    compile 'com.android.support:recyclerview-v7:25.2.0'
-    compile 'com.jakewharton.timber:timber:4.1.2'
-    compile 'com.android.support:design:25.2.0'
+    compile 'com.jakewharton.timber:timber:4.5.1'
     compile 'org.greenrobot:eventbus:3.0.0'
+}
+
+kapt {
+    // Seems to be needed for view bindings
+    generateStubs = true
 }
 
 // load signing information based on gradle.properties
