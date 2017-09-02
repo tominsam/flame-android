@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 26
@@ -39,6 +41,9 @@ dependencies {
 
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     kapt "com.android.databinding:compiler:$android_plugin_version"
+
+    // https://fabric.io/kits/android/crashlytics/install
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') { transitive = true }
 
     compile 'javax.jmdns:jmdns:3.4.1'
     compile 'com.jakewharton.timber:timber:4.5.1'

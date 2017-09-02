@@ -21,7 +21,7 @@ class DiscoveryService(tempContext: Context) : ServiceTypeListener, ServiceListe
     private val wifiLock: WifiManager.MulticastLock?
 
     init {
-        val wifi = context.getSystemService(android.content.Context.WIFI_SERVICE) as android.net.wifi.WifiManager
+        val wifi = context.applicationContext.getSystemService(android.content.Context.WIFI_SERVICE) as android.net.wifi.WifiManager
         wifiLock = wifi.createMulticastLock("Flame")
         wifiLock.setReferenceCounted(true)
         wifiLock.acquire()
@@ -71,7 +71,9 @@ class DiscoveryService(tempContext: Context) : ServiceTypeListener, ServiceListe
             if (filter != null && !TextUtils.equals(filter, key)) {
                 continue
             }
-            grouped.putIfAbsent(key, ArrayList())
+            if (grouped[key] == null) {
+                grouped[key] = ArrayList()
+            }
             grouped[key]?.add(service)
         }
 
