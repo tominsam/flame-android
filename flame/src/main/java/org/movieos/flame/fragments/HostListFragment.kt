@@ -43,19 +43,19 @@ class HostListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = RecyclerViewFragmentBinding.inflate(inflater, container, false)
-        binding!!.toolbar.setTitle(R.string.app_name)
-        binding!!.recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding!!.recyclerView.adapter = adapter
+        binding?.toolbar?.setTitle(R.string.app_name)
+        binding?.recyclerView?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding?.recyclerView?.adapter = adapter
         val divider = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
         divider.setDrawable(ContextCompat.getDrawable(context, R.drawable.divider))
-        binding!!.recyclerView.addItemDecoration(divider)
-        return binding!!.root
+        binding?.recyclerView?.addItemDecoration(divider)
+        return binding?.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         if (binding != null) {
-            binding!!.unbind()
+            binding?.unbind()
             binding = null
         }
     }
