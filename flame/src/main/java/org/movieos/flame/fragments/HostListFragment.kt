@@ -42,12 +42,13 @@ class HostListFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val context = context ?: return null
         binding = RecyclerViewFragmentBinding.inflate(inflater, container, false)
         binding?.toolbar?.setTitle(R.string.app_name)
         binding?.recyclerView?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding?.recyclerView?.adapter = adapter
         val divider = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
-        divider.setDrawable(ContextCompat.getDrawable(context, R.drawable.divider))
+        divider.setDrawable(ContextCompat.getDrawable(context, R.drawable.divider)!!)
         binding?.recyclerView?.addItemDecoration(divider)
         return binding?.root
     }
@@ -65,7 +66,7 @@ class HostListFragment : Fragment() {
         adapter.setHosts(MyApplication.discoveryService.hosts)
     }
 
-    @Suppress("unused")
+    @Suppress("UNUSED_PARAMETER")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: DiscoveryService.HostsChangedNotification) {
         Timber.v("seen %d hosts", MyApplication.discoveryService.hosts.size)

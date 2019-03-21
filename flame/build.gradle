@@ -1,11 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.0'
+    compileSdkVersion 28
 
     dataBinding {
         enabled = true
@@ -13,7 +11,7 @@ android {
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 28
     }
 
     productFlavors {
@@ -34,20 +32,17 @@ android {
 }
 
 dependencies {
-    compile "com.android.support:support-v4:$support_version"
-    compile "com.android.support:appcompat-v7:$support_version"
-    compile "com.android.support:recyclerview-v7:$support_version"
-    compile "com.android.support:design:$support_version"
+    api "com.android.support:support-v4:$support_version"
+    api "com.android.support:appcompat-v7:$support_version"
+    api "com.android.support:recyclerview-v7:$support_version"
+    api "com.android.support:design:$support_version"
 
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    kapt "com.android.databinding:compiler:$android_plugin_version"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    //kapt "com.android.databinding:compiler:$android_plugin_version"
 
-    // https://fabric.io/kits/android/crashlytics/install
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') { transitive = true }
-
-    compile 'javax.jmdns:jmdns:3.4.1'
-    compile 'com.jakewharton.timber:timber:4.5.1'
-    compile 'org.greenrobot:eventbus:3.0.0'
+    api 'javax.jmdns:jmdns:3.4.1'
+    api 'com.jakewharton.timber:timber:4.5.1'
+    api 'org.greenrobot:eventbus:3.0.0'
 }
 
 kapt {

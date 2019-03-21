@@ -27,31 +27,32 @@ import javax.jmdns.ServiceEvent
 class ServiceListFragment : android.support.v4.app.Fragment() {
 
     private val adapter = ServiceListAdapter()
-    var hostIdentifier: String? = null
-    var binding: RecyclerViewFragmentBinding? = null
+    private var hostIdentifier: String? = null
+    private var binding: RecyclerViewFragmentBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        hostIdentifier = arguments.getString(HOST_IDENTIFIER)
+        hostIdentifier = arguments?.getString(HOST_IDENTIFIER)
         if (hostIdentifier == null) {
             Timber.e("no identifier in bundle")
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val context = context ?: return null
         val binding = RecyclerViewFragmentBinding.inflate(inflater, container, false)
 
         binding.toolbar.title = hostIdentifier
-        val back = ContextCompat.getDrawable(context, R.drawable.ic_arrow_back_black_24dp)
+        val back = ContextCompat.getDrawable(context, R.drawable.ic_arrow_back_black_24dp)!!
         back.setTint(0xFFFFFFFF.toInt())
         binding.toolbar.navigationIcon = back
-        binding.toolbar.setNavigationOnClickListener { activity.onBackPressed() }
+        binding.toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.adapter = adapter
 
         val divider = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
-        divider.setDrawable(ContextCompat.getDrawable(context, R.drawable.divider))
+        divider.setDrawable(ContextCompat.getDrawable(context, R.drawable.divider)!!)
         binding.recyclerView.addItemDecoration(divider)
 
         this.binding = binding
@@ -102,14 +103,14 @@ class ServiceListFragment : android.support.v4.app.Fragment() {
             holder.binding.text1.text = service.name
             holder.binding.text2.text = service.type
 
-            holder.itemView.setOnClickListener({ v ->
+            holder.itemView.setOnClickListener { v ->
                 val activity = v.context as AppCompatActivity
                 activity.supportFragmentManager
                         .beginTransaction()
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                        //                    .replace(R.id.main, ServiceListFragment.make(host))
+                        //.replace(R.id.main, ServiceListFragment.make(host))
                         .commit()
-            })
+            }
         }
 
     }
@@ -120,8 +121,9 @@ class ServiceListFragment : android.support.v4.app.Fragment() {
 
         fun build(host: FlameHost): Fragment {
             val fragment = ServiceListFragment()
-            fragment.arguments = Bundle()
-            fragment.arguments.putString(HOST_IDENTIFIER, host.identifer)
+            fragment.arguments = Bundle().apply {
+                putString(HOST_IDENTIFIER, host.identifer)
+            }
             return fragment
         }
     }
